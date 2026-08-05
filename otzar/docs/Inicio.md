@@ -1,0 +1,1 @@
+**Otzar (אוצר)** significa **tesouro**, **depósito** ou **armazém**. Em diversos contextos bíblicos, a palavra é usada para um lugar onde recursos valiosos são guardados. Para um software que reúne conhecimento, projetos e informações, a associação faz bastante sentido.
