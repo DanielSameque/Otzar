@@ -1,0 +1,81 @@
+---
+alwaysApply: true
+---
+---
+
+description: "Regras obrigatórias para consulta e manutenção da documentação"
+globs: "**/*"
+alwaysApply: true
+-----------------
+
+# Documentação
+
+A documentação deve ser considerada parte do código e deve permanecer sincronizada com o comportamento atual do sistema.
+
+## Antes de modificar
+
+Antes de realizar qualquer alteração:
+
+1. Identificar se existe documentação relacionada à rotina, funcionalidade ou componente que será alterado.
+2. Ler a documentação encontrada antes de modificar o código.
+3. Considerar a documentação como parte dos requisitos da alteração.
+4. Não ignorar documentação existente.
+
+## Após modificar
+
+Ao concluir uma alteração:
+
+1. Identificar qual documentação foi afetada.
+2. Atualizar a documentação existente para refletir o novo comportamento.
+3. Se não existir documentação para a rotina ou funcionalidade modificada, criar uma documentação correspondente.
+4. Novas documentações devem ser criadas dentro da pasta `docs/`.
+5. A documentação deve descrever o comportamento atual, e não o comportamento anterior.
+
+## Regra de consistência
+
+Sempre que código e documentação estiverem divergentes, a documentação deve ser atualizada junto com o código.
+
+Não considerar uma tarefa concluída enquanto a documentação afetada não estiver:
+
+* Identificada;
+* Atualizada; ou
+* Criada, quando inexistente.
+
+## Localização
+
+Documentações do projeto devem ficar em:
+
+```text
+docs/
+```
+
+Organizar a documentação de forma coerente com as funcionalidades do sistema.
+
+Exemplo:
+
+```text
+docs/
+├── arquitetura/
+├── funcionalidades/
+│   ├── tarefas.md
+│   ├── clientes.md
+│   └── sprints.md
+├── regras-de-negocio/
+└── integracoes/
+```
+
+## Importante
+
+Não criar documentação genérica ou redundante apenas para cumprir esta regra.
+
+Documentar principalmente:
+
+* Regras de negócio.
+* Fluxos importantes.
+* Comportamentos não óbvios.
+* Integrações.
+* Decisões técnicas.
+* Rotinas relevantes.
+* Configurações necessárias para funcionamento.
+
+A documentação deve ser objetiva, prática e suficiente para que outro desenvolvedor consiga entender e manter a rotina.

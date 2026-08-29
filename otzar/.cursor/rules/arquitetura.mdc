@@ -1,0 +1,238 @@
+---
+alwaysApply: true
+---
+## MVVM
+
+### View
+
+Responsável somente pela interface e interação do usuário.
+
+Não deve conter:
+
+* Regras de negócio.
+* Chamadas HTTP.
+* Acesso direto ao Repository.
+* Lógica complexa.
+
+### ViewModel
+
+Responsável pelo estado e comportamento da tela/feature.
+
+Deve:
+
+* Expor estado para a View.
+* Processar ações do usuário.
+* Chamar Services.
+* Controlar loading, sucesso e erro.
+* Utilizar Riverpod para reatividade.
+
+### Service
+
+Responsável pelas regras de negócio.
+
+Pode:
+
+* Validar regras.
+* Coordenar múltiplos Repositories.
+* Executar operações de negócio.
+
+### Repository
+
+Responsável pelo acesso aos dados.
+
+Deve esconder detalhes de infraestrutura da aplicação.
+
+Exemplo:
+
+```text
+TaskViewModel
+ ↓
+TaskService
+ ↓
+TaskRepository
+ ↓
+ApiClient
+```
+
+---
+
+## Riverpod
+
+Utilizar Riverpod para:
+
+* Gerenciamento de estado.
+* Injeção de dependências.
+* Estados assíncronos.
+* Reatividade.
+
+Manter Providers pequenos e relacionados à sua responsabilidade.
+
+Não concentrar regras de negócio dentro dos Providers.
+
+---
+
+## Models
+
+Utilizar **Freezed** para Models que precisem de:
+
+* Imutabilidade.
+* `copyWith`.
+* Igualdade por valor.
+* Serialização JSON.
+
+Exemplo:
+
+```dart
+@freezed
+class Task with _$Task {
+  const factory Task({
+    required int id,
+    required String title,
+    required String status,
+  }) = _Task;
+
+  factory Task.fromJson(Map<String, dynamic> json) =>
+      _$TaskFromJson(json);
+}
+```
+
+---
+
+# Design Patterns
+
+Utilizar Design Patterns somente quando resolverem um problema real.
+
+### Repository Pattern
+
+Isola o acesso aos dados da lógica da aplicação.
+
+```text
+Service → Repository → API
+```
+
+### MVVM
+
+Separa apresentação, estado e lógica da View.
+
+```text
+View → ViewModel
+```
+
+### Observer / Reactive
+
+Utilizar Riverpod para atualização reativa da interface e estados derivados.
+
+Evitar verificações manuais quando uma dependência reativa resolver o problema.
+
+### Dependency Injection
+
+Utilizar Riverpod para injetar:
+
+* Services.
+* Repositories.
+* ApiClient.
+* Outras dependências.
+
+### Factory
+
+Utilizar quando a criação de objetos depender de diferentes implementações ou condições.
+
+### Strategy
+
+Utilizar quando existirem diferentes algoritmos ou comportamentos intercambiáveis.
+
+Não utilizar Factory ou Strategy apenas para seguir um padrão.
+
+---
+
+# SOLID
+
+Procurar seguir SOLID:
+
+* **SRP:** cada classe deve ter uma responsabilidade clara.
+* **OCP:** permitir extensão sem alterações desnecessárias.
+* **LSP:** respeitar contratos das abstrações.
+* **ISP:** preferir interfaces pequenas.
+* **DIP:** depender de abstrações quando houver benefício real.
+
+Não criar interfaces ou abstrações sem necessidade.
+
+---
+
+# OOP
+
+Utilizar:
+
+* Classes.
+* Interfaces.
+* Classes abstratas.
+* Composição.
+* Encapsulamento.
+* Polimorfismo.
+
+Priorizar composição quando ela produzir código mais simples.
+
+---
+
+# REST
+
+Seguir padrões REST:
+
+```text
+GET     → consultar
+POST    → criar
+PUT     → atualizar
+PATCH   → atualização parcial
+DELETE  → excluir
+```
+
+Preferir recursos:
+
+```text
+GET    /tasks
+GET    /tasks/:id
+POST   /tasks
+PUT    /tasks/:id
+DELETE /tasks/:id
+```
+
+Evitar endpoints orientados a ações quando uma solução REST adequada existir.
+
+---
+
+# Testes
+
+Testes unitários devem seguir **AAA**:
+
+```text
+Arrange
+Act
+Assert
+```
+
+Priorizar testes para:
+
+* Services.
+* ViewModels.
+* Regras de negócio.
+* Repositories com lógica relevante.
+
+---
+
+# Regra de simplicidade
+
+Não criar camadas, classes, interfaces ou Design Patterns apenas para seguir a arquitetura.
+
+Antes de adicionar uma abstração, verificar se existe uma necessidade real.
+
+Prioridade:
+
+```text
+Simplicidade
+→ Legibilidade
+→ Testabilidade
+→ Manutenibilidade
+→ Escalabilidade
+```
+
+A arquitetura deve servir ao código, e não o código à arquitetura.

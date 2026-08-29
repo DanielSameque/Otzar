@@ -1,0 +1,339 @@
+---
+alwaysApply: true
+---
+---
+
+description: "Estrutura e organização dos arquivos do Otzar"
+globs: "**/*.dart"
+alwaysApply: true
+-----------------
+
+# Estrutura do Projeto — Otzar
+
+O projeto deve ser organizado principalmente por **Features**, mantendo dentro de cada Feature suas próprias camadas de dados, negócio e apresentação.
+
+## Estrutura padrão
+
+```text
+lib/
+├── app/
+├── core/
+├── features/
+└── main.dart
+```
+
+---
+
+# 1. Features
+
+Toda funcionalidade do sistema deve ficar dentro de `features/`.
+
+Exemplos:
+
+```text
+features/
+├── auth/
+├── tasks/
+├── clients/
+├── projects/
+├── sprints/
+└── dashboard/
+```
+
+Uma Feature deve conter apenas código relacionado à sua própria responsabilidade.
+
+Estrutura padrão:
+
+```text
+feature/
+├── data/
+│   ├── models/
+│   └── repositories/
+│
+├── domain/
+│   └── services/
+│
+└── presentation/
+    ├── view_models/
+    ├── views/
+    └── widgets/
+```
+
+---
+
+# 2. Presentation
+
+Contém tudo relacionado à apresentação da Feature.
+
+```text
+presentation/
+├── view_models/
+├── views/
+└── widgets/
+```
+
+### views
+
+Contém as telas da Feature.
+
+Exemplo:
+
+```text
+tasks_view.dart
+task_details_view.dart
+```
+
+### view_models
+
+Contém os ViewModels e Providers responsáveis pelo estado e comportamento da tela.
+
+Utilizar Riverpod.
+
+Exemplo:
+
+```text
+task_view_model.dart
+```
+
+### widgets
+
+Contém componentes visuais específicos da Feature.
+
+Exemplo:
+
+```text
+task_card.dart
+task_filter.dart
+task_status_badge.dart
+```
+
+Widgets reutilizáveis entre várias Features devem ir para `core/widgets`.
+
+---
+
+# 3. Data
+
+Contém acesso e representação dos dados da Feature.
+
+```text
+data/
+├── models/
+└── repositories/
+```
+
+### models
+
+Contém os Models da Feature.
+
+Utilizar Freezed quando apropriado.
+
+Exemplo:
+
+```text
+task.dart
+```
+
+Arquivos gerados pelo Freezed/json_serializable devem permanecer junto ao Model.
+
+### repositories
+
+Contém os Repositories responsáveis pelo acesso aos dados.
+
+Exemplo:
+
+```text
+task_repository.dart
+```
+
+O Repository não deve conter regras de negócio.
+
+---
+
+# 4. Domain
+
+Contém as regras de negócio da Feature.
+
+```text
+domain/
+└── services/
+```
+
+### services
+
+Contém os Services responsáveis pelas regras de negócio.
+
+Exemplo:
+
+```text
+task_service.dart
+```
+
+Services podem utilizar Repositories para executar operações de negócio.
+
+---
+
+# 5. Core
+
+`core/` contém somente recursos realmente compartilhados por várias Features e que não pertencem a uma funcionalidade específica.
+
+Estrutura sugerida:
+
+```text
+core/
+├── constants/
+├── errors/
+├── network/
+├── storage/
+├── utils/
+└── widgets/
+```
+
+### network
+
+Infraestrutura HTTP compartilhada.
+
+Exemplo:
+
+```text
+api_client.dart
+```
+
+### storage
+
+Acesso ao armazenamento local compartilhado.
+
+Exemplo:
+
+```text
+local_storage.dart
+```
+
+### errors
+
+Exceções e erros compartilhados.
+
+### constants
+
+Constantes globais da aplicação.
+
+### utils
+
+Funções utilitárias realmente compartilhadas.
+
+### widgets
+
+Widgets reutilizáveis por várias Features.
+
+Não utilizar `core` como depósito de arquivos sem uma responsabilidade definida.
+
+---
+
+# 6. App
+
+`app/` contém configurações globais da aplicação.
+
+Exemplo:
+
+```text
+app/
+├── app.dart
+├── router/
+└── theme/
+```
+
+### router
+
+Configuração do GoRouter e rotas globais.
+
+### theme
+
+Configuração do Material Design 3, temas, cores e tipografia.
+
+---
+
+# 7. Fluxo de dependências
+
+As dependências devem seguir:
+
+```text
+View
+ ↓
+ViewModel
+ ↓
+Service
+ ↓
+Repository
+ ↓
+ApiClient
+```
+
+A View não deve acessar diretamente:
+
+* Repository.
+* ApiClient.
+* Banco de dados.
+* Serviços de infraestrutura.
+
+---
+
+# 8. Regra de localização
+
+Antes de criar um arquivo, determine a quem ele pertence.
+
+Se pertence a uma Feature:
+
+```text
+features/<feature>/
+```
+
+Se é compartilhado entre Features:
+
+```text
+core/
+```
+
+Se é configuração global da aplicação:
+
+```text
+app/
+```
+
+Não criar pastas globais como:
+
+```text
+❌ lib/models/
+❌ lib/services/
+❌ lib/repositories/
+❌ lib/providers/
+❌ lib/views/
+```
+
+quando os arquivos pertencem a Features específicas.
+
+Preferir:
+
+```text
+✅ features/tasks/data/models/
+✅ features/tasks/domain/services/
+✅ features/tasks/data/repositories/
+✅ features/tasks/presentation/view_models/
+✅ features/tasks/presentation/views/
+```
+
+---
+
+# 9. Regra de simplicidade
+
+Não criar subpastas ou camadas que não sejam necessárias.
+
+A estrutura deve crescer conforme a complexidade da Feature.
+
+Não criar abstrações ou arquivos vazios apenas para seguir a estrutura.
+
+A organização deve facilitar:
+
+* Localização do código.
+* Manutenção.
+* Testes.
+* Separação de responsabilidades.
+* Escalabilidade.

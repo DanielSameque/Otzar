@@ -8,30 +8,32 @@ O Otzar deve seguir estes princípios:
 - Poucos cliques para executar qualquer ação.
 - Interface consistente em todos os módulos.
 - Toda informação deve poder ser localizada rapidamente.
-- A documentação faz parte do projeto, não um módulo separado.
-- Todo dado deve poder ser relacionado (Projeto → Sprint → Tarefa → Documento → Ticket).
+- A documentação faz parte do projeto, não é um módulo separado.
+- Todo dado deve poder ser relacionado (Ex: Projeto → Sprint → Tarefa → Documento → Ticket).
 
 ## O que é o Otzar?
 
+**Otzar (אוצר)** significa **tesouro**, **depósito** ou **armazém**. Em diversos contextos bíblicos, a palavra é usada para um lugar onde recursos valiosos são guardados. Para um software que reúne conhecimento, projetos e informações, a associação faz bastante sentido.
+
 O **Otzar** é uma plataforma de gestão de projetos voltada para equipes de desenvolvimento de software e suporte técnico. Seu objetivo é centralizar o gerenciamento de projetos, tarefas, tickets e conhecimento em uma única ferramenta, mantendo uma interface simples, intuitiva e flexível.
 
-O sistema foi projetado para substituir a necessidade de utilizar diversas ferramentas separadas (como gerenciadores de projetos, sistemas de tickets e Obsidian Publish), reunindo todas essas funcionalidades em um único ambiente.
+O sistema foi projetado para substituir a necessidade de utilizar diversas ferramentas separadas (como gerenciadores de projetos, sistemas de tickets e base de conhecimento), reunindo todas as principais funcionalidades em um único ambiente.
 
 ---
 
 # Objetivo
 
-Permitir que empresas e suas equipes gerenciem de forma simples e eficiente um ou mais projetos, oferecendo:
+Permitir que empresas e suas equipes gerenciem de forma simples e eficiente um ou mais projetos, e centralizar o conhecimento, oferecendo:
 
 - Controle de versões dos projetos;
-- Gerenciamento de Backlog;
+- Gerenciamento de Backlog(tarefas);
 - Planejamento e execução de Sprints;
 - Visualização das tarefas em diferentes formatos;
 - Gerenciamento de tickets de suporte;
 - Base de conhecimento integrada em Markdown;
 - Relatórios, indicadores e dashboards de desempenho.
 
-O foco principal é oferecer uma experiência semelhante à flexibilidade do Notion, porém especializada na gestão de projetos de software.
+O foco principal é oferecer uma experiência semelhante à flexibilidade do software Notion, porém especializada na gestão de projetos de software. E com uma facil manipulação a base de conhecimento como no software obsidian.
 
 ---
 
@@ -41,9 +43,9 @@ O Otzar busca resolver os seguintes problemas:
 
 - Complexidade excessiva das ferramentas tradicionais de gestão de projetos.
 - Necessidade de utilizar múltiplas ferramentas para organizar projetos, suporte e documentação.
-- Falta de integração entre tarefas e a documentação técnica.
+- Falta de integração entre tarefas e a documentação técnica ou artigo de base de conhecimento.
 - Dependência do Obsidian Publish e outros semelhantes para disponibilização pública da base de conhecimento.
-- Dificuldade em acompanhar indicadores de produtividade e andamento dos projetos.
+- Dificuldade em acompanhar indicadores de produtividade e andamento dos projetos. Automatizando a notificação de atrasos e prazos.
 
 ---
 
@@ -68,12 +70,12 @@ O Otzar busca resolver os seguintes problemas:
 
 As tarefas poderão ser exibidas em diferentes formatos, permitindo que cada usuário escolha a forma mais adequada para seu trabalho:
 
-- Kanban
+- Quadro (Kanban)
 - Calendário
 - Cronograma (Timeline/Gantt)
 - Tabela
 
-A mudança entre as visualizações poderá ser feita a qualquer momento, sem alterar os dados.
+A mudança entre as visualizações poderá ser feita a qualquer momento, sem alterar os dados. E poderá ser filtrado e ordenado por cliente, responsável, prioridade, status, entre outros.
 
 ---
 

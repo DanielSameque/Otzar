@@ -1,0 +1,225 @@
+---
+alwaysApply: false
+---
+---
+
+description: "Pacotes, bibliotecas e escolhas tecnológicas do Otzar"
+globs: "**/*.dart"
+alwaysApply: true
+-----------------
+
+# Tecnologias e Pacotes — Otzar
+
+Esta regra define os principais pacotes, bibliotecas e escolhas tecnológicas do projeto.
+
+Antes de adicionar uma nova dependência, verificar se uma das tecnologias já adotadas resolve o problema.
+
+---
+
+## Pacotes Flutter/Dart
+
+### http
+
+**Motivo:** comunicação com a API REST do Otzar.
+
+Utilizar para requisições HTTP ao backend.
+
+Preferir `http` em vez de adicionar outra biblioteca HTTP sem necessidade.
+
+---
+
+### freezed
+
+**Motivo:** criação de Models imutáveis e redução de código repetitivo.
+
+Utilizar principalmente para:
+
+* Models imutáveis.
+* `copyWith`.
+* Igualdade por valor.
+* Classes com estados/tipos distintos quando necessário.
+
+---
+
+### go_router
+
+**Motivo:** gerenciamento da navegação e rotas da aplicação.
+
+Utilizar para:
+
+* Rotas.
+* Navegação.
+* Redirecionamentos.
+* Rotas protegidas/autenticação.
+* Parâmetros de rota.
+
+Evitar implementar um sistema próprio de navegação.
+
+---
+
+### flutter_riverpod
+
+**Motivo:** gerenciamento de estado e injeção de dependências.
+
+Utilizar para:
+
+* Estado das telas/features.
+* Estado assíncrono.
+* Reatividade.
+* Injeção de Services, Repositories e ApiClient.
+
+Não utilizar Riverpod como substituto das camadas de Service ou Repository.
+
+---
+
+### shared_preferences
+
+**Motivo:** armazenamento local de preferências simples do usuário.
+
+Utilizar para dados não sensíveis, como:
+
+* Preferências de interface.
+* Filtros persistentes.
+* Configurações simples.
+* Flags de configuração.
+
+Não utilizar para senhas, tokens ou informações sensíveis.
+
+---
+
+### shimmer
+
+**Motivo:** criação de efeitos de carregamento no estilo Skeleton.
+
+Utilizar para representar visualmente conteúdos enquanto os dados estão sendo carregados.
+
+Escolhido por ser uma solução popular, madura e compatível com as plataformas utilizadas pelo Flutter.
+
+Referência:
+https://pub.dev/packages/shimmer
+
+---
+
+## Serialização
+
+### json_serializable
+
+**Motivo:** conversão entre JSON da API e Models Dart.
+
+Utilizar em conjunto com Freezed quando necessário:
+
+```text
+JSON
+ ↓
+Model.fromJson()
+ ↓
+Objeto Dart
+```
+
+e:
+
+```text
+Objeto Dart
+ ↓
+toJson()
+ ↓
+JSON
+```
+
+---
+
+### freezed_annotation
+
+**Motivo:** disponibilizar as anotações utilizadas pelo Freezed nos Models.
+
+Utilizar junto com `freezed`.
+
+---
+
+### json_annotation
+
+**Motivo:** anotações utilizadas pelo `json_serializable`.
+
+Utilizar junto com a serialização dos Models.
+
+---
+
+## UI / Design
+
+### Material Design 3
+
+O projeto deve utilizar a UI nativa do Flutter baseada em **Material Design 3**.
+
+Priorizar os componentes nativos do Flutter antes de adicionar bibliotecas de UI externas.
+
+Referência:
+
+https://m3.material.io/
+
+---
+
+### Material Theme Builder
+
+A paleta de cores do Otzar deve ser baseada no **Material Theme Builder**.
+
+Utilizar o Material Theme Builder para definir:
+
+* Cores.
+* Light Theme.
+* Dark Theme.
+* Esquema de cores do aplicativo.
+* Tokens relacionados ao Material 3.
+
+Referência:
+
+https://material-foundation.github.io/material-theme-builder/
+
+---
+
+## Pacotes de desenvolvimento
+
+### build_runner
+
+**Motivo:** geração automática de código utilizado por Freezed e json_serializable.
+
+Utilizar somente durante o processo de geração de código.
+
+---
+
+### freezed
+
+Pacote de desenvolvimento utilizado para gerar os Models definidos com Freezed.
+
+---
+
+### json_serializable
+
+Pacote de desenvolvimento utilizado para gerar código de serialização JSON.
+
+---
+
+# Regras para dependências
+
+1. Não adicionar pacotes sem necessidade real.
+2. Antes de adicionar uma dependência, verificar se o Flutter ou algum pacote já utilizado resolve o problema.
+3. Preferir pacotes maduros, mantidos e amplamente utilizados.
+4. Evitar múltiplos pacotes com responsabilidades sobrepostas.
+5. Não substituir uma tecnologia definida nesta regra sem uma justificativa técnica.
+6. Manter as dependências atualizadas quando isso não introduzir incompatibilidades.
+7. Antes de adicionar uma biblioteca, verificar sua compatibilidade com a versão atual do Flutter/Dart.
+8. Bibliotecas externas de UI devem ser evitadas quando o Material Design 3 nativo atender à necessidade.
+
+# Stack principal
+
+```text
+Flutter
+│
+├── Material Design 3
+├── Riverpod
+├── GoRouter
+├── http
+├── Freezed
+├── json_serializable
+├── SharedPreferences
+└── Shimmer
+```
