@@ -1,8 +1,7 @@
 ---
-
 description: "Regras obrigatórias para consulta, manutenção e representação visual da documentação"
-globs: "**/*"
-alwaysApply: true
+alwaysApply: false
+---
 -----------------
 
 # Documentação
@@ -78,8 +77,8 @@ Para representar um fluxo entre componentes:
 
 ```mermaid
 flowchart LR
-    View --> Controller
-    Controller --> Service
+    View --> ViewModel
+    ViewModel --> Service
     Service --> Repository
     Repository --> API
 ```
@@ -89,14 +88,14 @@ Para representar uma sequência de comunicação:
 ```mermaid
 sequenceDiagram
     Usuario->>View: Executa ação
-    View->>Controller: Solicita operação
-    Controller->>Service: Executa regra
+    View->>ViewModel: Solicita operação
+    ViewModel->>Service: Executa regra
     Service->>Repository: Solicita dados
     Repository->>API: Requisição
     API-->>Repository: Resposta
     Repository-->>Service: Dados
-    Service-->>Controller: Resultado
-    Controller-->>View: Atualiza interface
+    Service-->>ViewModel: Resultado
+    ViewModel-->>View: Atualiza interface
 ```
 
 Os diagramas devem permanecer sincronizados com o comportamento atual do sistema. Sempre que uma alteração de código modificar o fluxo representado, o diagrama também deve ser atualizado.

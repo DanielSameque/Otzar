@@ -17,10 +17,11 @@ Validar o conceito, a arquitetura e o fluxo principal do Otzar.
 * Tarefas
 * Backlog
 * Kanban
-* Base de Conhecimento
-* Documentação Markdown
+* Base de Conhecimento (acervo Markdown único)
 
 O escopo detalhado está definido em `10-mvp.md`.
+
+Cliente, categoria e tags não fazem parte desta fase. Projeto e tarefa não exigem cliente.
 
 ---
 
@@ -29,12 +30,14 @@ O escopo detalhado está definido em `10-mvp.md`.
 Expandir os recursos de gerenciamento e acompanhamento.
 
 * Sprints
-* Clientes
+* Versões de projeto
+* Clientes (cadastro e vínculos com projetos, tarefas e tickets)
 * Categorias e Tags
 * Comentários
 * Anexos
 * Calendário
 * Timeline
+* Gestão de Tickets
 * Dashboard
 * Time Tracking
 
@@ -42,7 +45,6 @@ Expandir os recursos de gerenciamento e acompanhamento.
 
 ## Fase 3 — Integrações e Automação
 
-* Gestão de Tickets
 * Notificações
 * Automações
 * Integração com WhatsApp

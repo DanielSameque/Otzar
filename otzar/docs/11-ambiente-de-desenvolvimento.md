@@ -407,20 +407,58 @@ flutter pub outdated
 
 ---
 
-# 🚀 Deploy, Build e Compile
+# 🚀 Deploy (Flutter Web no Render)
 
-Para gerar o arquivo final para produção, executar o comando na pasta do projeto:
+O frontend web é publicado como **Site Estático no Render**, no mesmo painel do backend NestJS, conforme `02-stack-tecnologica.md`.
+
+Não utilizar NGINX, Apache ou scripts de limpeza de `nginx.conf`. O Render serve os arquivos estáticos e o HTTPS.
+
+## Build local
+
+Para gerar o build web na pasta padrão do Flutter:
 
 ```powershell
-flutter build web --release --output C:\GitHub\WEB\build\APP
+flutter build web --release
 ```
 
-Após gerar o build, é necessário executar o arquivo:
+A saída fica em:
 
 ```text
-C:\GitHub\LIMPAR.bat
+build\web
 ```
 
-Esse arquivo remove o `.env` gerado pelo Flutter e o `nginx.conf`, caso exista na pasta do NGINX.
+Não versionar segredos no build. A URL da API e demais configurações do ambiente devem ser definidas no painel do Render ou passadas no build com `--dart-define`.
 
-⚠️ **É extremamente importante remover esses arquivos após o build**, pois eles podem sobrescrever os arquivos correspondentes no servidor de produção.
+## Publicar o Site Estático
+
+1. No Render, criar um serviço do tipo **Static Site** apontando para o repositório do Otzar.
+2. Configurar:
+
+```text
+Build Command:      flutter build web --release
+Publish Directory:  build/web
+```
+
+3. Adicionar a regra de reescrita para SPA, necessária para as rotas do GoRouter:
+
+```text
+Source:       /*
+Destination:  /index.html
+Action:       Rewrite
+```
+
+4. Definir as variáveis do ambiente web (por exemplo, a URL da API) no painel do serviço.
+5. Fazer o deploy a partir da branch de produção.
+
+O ambiente de build do Render não possui o SDK do Flutter pré-instalado. Há duas opções:
+
+* Instalar o Flutter durante o build por meio de um script no `Build Command`; ou
+* Gerar o build localmente e publicar o conteúdo de `build/web`.
+
+## Backend e banco
+
+O backend NestJS roda como **Web Service** no Render e o PostgreSQL fica no **Neon**.
+
+O frontend deve chamar apenas a API REST do NestJS via HTTPS. Como o Site Estático e o Web Service possuem domínios distintos, o backend precisa liberar a origem do frontend via CORS.
+
+Nos planos gratuitos, o Web Service hiberna após inatividade e o compute do Neon é suspenso quando ocioso, deixando a primeira requisição mais lenta.

@@ -29,6 +29,8 @@ Responsável pelo acesso ao sistema.
 
 Os projetos organizam as informações do sistema, mas algumas entidades, como tarefas, podem existir independentemente de um projeto.
 
+No MVP, o projeto **não** exige cliente. Associação com clientes fica para o módulo Clientes, após o MVP.
+
 ### Funcionalidades
 
 * Criar projeto
@@ -41,9 +43,11 @@ Os projetos organizam as informações do sistema, mas algumas entidades, como t
 
 ## 3. Tarefas
 
-A tarefa é a entidade central do Otzar.
+A tarefa é a entidade central do Otzar no desenvolvimento.
 
 As tarefas podem existir com ou sem projeto e podem ser organizadas posteriormente em Sprints.
+
+Associação com cliente, categoria e tags **não faz parte do MVP**. Esses campos entram junto com os módulos Clientes e Categorias e Tags.
 
 ### Funcionalidades
 
@@ -53,18 +57,15 @@ As tarefas podem existir com ou sem projeto e podem ser organizadas posteriormen
 * Priorizar tarefa
 * Alterar status
 * Definir responsável
-* Associar cliente
-* Associar categoria
-* Adicionar tags
 * Criar subtarefas
 
 ---
 
 ## 4. Backlog
 
-O Backlog é uma visualização das tarefas que não possuem uma Sprint associada.
+O Backlog é a visualização **global e única** das tarefas que não possuem uma Sprint associada.
 
-No MVP, como Sprints ainda não fazem parte do sistema, as tarefas serão apresentadas no Backlog como sua principal visualização de planejamento.
+No MVP, como Sprints ainda não fazem parte do sistema, todas as tarefas aparecem no Backlog. O projeto, quando houver, pode ser usado como filtro, sem criar outro Backlog.
 
 ### Funcionalidades
 
@@ -76,9 +77,23 @@ No MVP, como Sprints ainda não fazem parte do sistema, as tarefas serão aprese
 
 ---
 
-## 5. Base de Conhecimento
+## 5. Kanban
 
-Cada projeto possuirá uma documentação integrada.
+Visualização das tarefas organizadas por status.
+
+A mudança entre Backlog, Kanban e outras visualizações futuras não altera os dados da tarefa.
+
+### Funcionalidades
+
+* Visualizar tarefas por status
+* Alterar status da tarefa no quadro
+* Filtrar e ordenar o quadro
+
+---
+
+## 6. Base de Conhecimento
+
+A Base de Conhecimento é o **único acervo Markdown** do sistema. Documentos não pertencem exclusivamente a um projeto.
 
 ### Funcionalidades
 
@@ -86,7 +101,8 @@ Cada projeto possuirá uma documentação integrada.
 * Editar documentos
 * Importar arquivos `.md`
 * Visualizar documentação
-* Relacionar documentos com tarefas
+* Relacionar documentos com tarefas (N:N)
+* Relacionar documentos com projetos (N:N)
 
 ---
 
@@ -97,7 +113,7 @@ Login
 
 ↓
 
-Projeto
+Projeto (opcional)
 
 ↓
 
@@ -105,14 +121,14 @@ Tarefas
 
 ↓
 
-Backlog
+Backlog / Kanban
 
 ↓
 
-Documentação Markdown
+Base de Conhecimento (acervo Markdown único)
 ```
 
-Tarefas também podem existir independentemente de um projeto.
+Tarefas também podem existir independentemente de um projeto. O Backlog é único e global.
 
 ---
 
@@ -121,7 +137,11 @@ Tarefas também podem existir independentemente de um projeto.
 As funcionalidades abaixo fazem parte do Roadmap, porém não serão implementadas inicialmente.
 
 * Sprints
-* Kanban
+* Versões de projeto
+* Clientes (incluindo vínculo de cliente a projeto, tarefa ou ticket)
+* Categorias e Tags
+* Comentários
+* Anexos
 * Calendário
 * Timeline
 * Gestão de Tickets
@@ -138,9 +158,10 @@ As funcionalidades abaixo fazem parte do Roadmap, porém não serão implementad
 
 O MVP será considerado validado quando for possível:
 
-* Criar e gerenciar um projeto;
-* Criar e gerenciar tarefas;
-* Visualizar e organizar tarefas no Backlog;
-* Relacionar documentos Markdown às tarefas;
-* Navegar pelo sistema de forma simples e intuitiva.
+* Criar e gerenciar um projeto sem exigir cliente;
+* Criar e gerenciar tarefas sem exigir cliente, categoria ou tags;
+* Visualizar e organizar tarefas no Backlog global;
+* Visualizar e mover tarefas no Kanban;
+* Relacionar documentos Markdown do acervo único às tarefas;
+* Navegar pelo sistema de forma simples e intuitiva;
 * Funcionar em diferentes tamanhos de tela/dispositivos.

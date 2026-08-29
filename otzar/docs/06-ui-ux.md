@@ -3,7 +3,8 @@
 ## Princípios
 
 * Interface simples, objetiva e consistente.
-* A **Tarefa** deve ser o elemento central da experiência.
+* A **Tarefa** deve ser o elemento central da experiência de desenvolvimento.
+* O **Ticket** deve ser o elemento central da experiência de suporte.
 * Priorizar produtividade e redução de cliques.
 * Informações importantes devem estar visíveis sem navegação desnecessária.
 * Desktop e web devem ser priorizados, mantendo responsividade para diferentes telas.
@@ -15,11 +16,15 @@ A navegação principal deve organizar o sistema por contexto:
 
 * Projetos
 * Tarefas
-* Backlog
+* Backlog (único e global)
+* Kanban
 * Sprints
+* Tickets
 * Clientes
 * Base de Conhecimento
 * Usuários
+
+O Backlog não é por projeto. Filtro por projeto, quando existir, ocorre dentro do mesmo Backlog.
 
 ## Tarefas
 
@@ -28,11 +33,26 @@ A visualização e edição de tarefas devem facilitar:
 * Identificação rápida da tarefa.
 * Status e prioridade.
 * Responsável.
-* Projeto e Sprint.
-* Cliente.
+* Projeto, Sprint e Versão.
+* Cliente (após o MVP).
 * Subtarefas.
-* Comentários e anexos.
-* Documentação relacionada.
+* Comentários e anexos (após o MVP).
+* Documentos relacionados do acervo único.
+
+## Tickets
+
+A visualização e edição de tickets devem facilitar:
+
+* Identificação rápida do chamado.
+* Status e prioridade.
+* Responsável e cliente.
+* Projeto relacionado.
+* Tarefas relacionadas.
+* Documentos relacionados do acervo único.
+
+## Base de Conhecimento
+
+A navegação da documentação deve tratar um único acervo. Vínculos com projeto, tarefa ou ticket não criam cópias do documento.
 
 ## Consistência
 

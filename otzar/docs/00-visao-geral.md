@@ -23,14 +23,14 @@ O sistema foi projetado para substituir a necessidade de utilizar diversas ferra
 
 # Objetivo
 
-Permitir que empresas e suas equipes gerenciem de forma simples e eficiente um ou mais projetos, e centralizar o conhecimento, oferecendo:
+O Otzar atende **uma única organização**. Permitir que a equipe gerencie de forma simples e eficiente um ou mais projetos, e centralizar o conhecimento, oferecendo:
 
-- Controle de versões dos projetos;
-- Gerenciamento de Backlog(tarefas);
+- Controle de versões dos projetos (entidade Versão por projeto);
+- Gerenciamento do Backlog global de tarefas;
 - Planejamento e execução de Sprints;
 - Visualização das tarefas em diferentes formatos;
-- Gerenciamento de tickets de suporte;
-- Base de conhecimento integrada em Markdown;
+- Gerenciamento de tickets de suporte (entidade própria, distinta de tarefa);
+- Base de conhecimento em um único acervo Markdown, com vínculos N:N;
 - Relatórios, indicadores e dashboards de desempenho.
 
 O foco principal é oferecer uma experiência semelhante à flexibilidade do software Notion, porém especializada na gestão de projetos de software. E com uma facil manipulação a base de conhecimento como no software obsidian.
@@ -81,7 +81,7 @@ A mudança entre as visualizações poderá ser feita a qualquer momento, sem al
 
 ## Gestão de Suporte
 
-O sistema possuirá um módulo específico para atendimento ao cliente.
+O atendimento ao cliente é funcionalidade principal do Otzar. Os **tickets** são uma entidade de domínio própria, não uma tarefa com categoria “Suporte”.
 
 Os tickets utilizarão a mesma estrutura de visualizações das tarefas:
 
@@ -106,7 +106,7 @@ Cada ticket poderá conter informações como:
 
 ## Base de Conhecimento
 
-O Otzar possuirá um módulo próprio de documentação baseado em arquivos Markdown.
+O Otzar possuirá um único acervo de documentação Markdown (Base de Conhecimento). Documentos não são duplicados por projeto nem por tarefa.
 
 Será possível:
 
@@ -115,7 +115,7 @@ Será possível:
 - Sincronizar documentos criados no Obsidian;
 - Sincronizar documentos criados pelo Cursor;
 - Publicar a documentação na web, substituindo o Obsidian Publish;
-- Relacionar documentos com projetos, tarefas e tickets.
+- Relacionar o mesmo documento a vários projetos, tarefas e tickets (N:N).
 
 ---
 

@@ -1,26 +1,34 @@
 # Módulos
 
-O Otzar é dividido em módulos funcionais, organizados em torno da **Tarefa**, que é a entidade central do sistema.
+O Otzar é dividido em módulos funcionais. A **Tarefa** é a entidade central do desenvolvimento. O **Ticket** é a entidade central do suporte.
 
 ## Projetos
 
-Gerenciamento de projetos, membros, configurações, sprints e informações gerais.
+Gerenciamento de projetos, membros, configurações, versões e informações gerais.
 
 ## Tarefas
 
-Criação, acompanhamento e organização das tarefas, incluindo status, prioridade, responsável, cliente, tags, comentários, anexos e subtarefas.
+Criação, acompanhamento e organização das tarefas, incluindo status, prioridade, responsável, subtarefas e, após o MVP, cliente, tags, comentários e anexos.
 
 ## Backlog
 
-Visualização das tarefas do projeto que não possuem Sprint associada.
+Visualização **global e única** das tarefas que não possuem Sprint associada. O projeto, quando houver, é apenas um filtro.
+
+## Kanban
+
+Visualização das tarefas organizadas por status. Opera sobre o mesmo conjunto de tarefas do sistema; não altera os dados.
 
 ## Sprints
 
 Planejamento e acompanhamento de ciclos de desenvolvimento e suas respectivas tarefas.
 
+## Tickets
+
+Módulo principal de atendimento ao cliente: abertura, acompanhamento e organização dos chamados. Tickets possuem visualizações próprias (Kanban, calendário, tabela e cronograma) e não são tarefas com categoria de suporte.
+
 ## Clientes
 
-Cadastro e gerenciamento dos clientes relacionados aos projetos e tarefas.
+Cadastro e gerenciamento dos clientes relacionados aos projetos, tarefas e tickets. Fora do MVP.
 
 ## Usuários
 
@@ -28,19 +36,19 @@ Gerenciamento dos usuários, seus perfis, cargos, status e participação nos pr
 
 ## Base de Conhecimento
 
-Gerenciamento da documentação Markdown vinculada aos projetos.
+Gerenciamento do **único acervo** de documentos Markdown do sistema. Os documentos podem ser vinculados a projetos, tarefas e tickets (N:N). Não existe módulo separado de “Documentação”.
 
-## Documentação
+## Versões
 
-Documentos relacionados a projetos e tarefas, permitindo conectar conhecimento ao trabalho executado.
+Gerenciamento das versões (releases) de cada projeto e associação das tarefas à versão correspondente.
 
 ## Categorias e Tags
 
-Classificação e organização das tarefas por tipo de trabalho e características personalizadas.
+Classificação e organização de tarefas, tickets e documentos. Fora do MVP.
 
 ## Comentários e Anexos
 
-Recursos de colaboração e registro de informações complementares nas tarefas.
+Recursos de colaboração e registro de informações complementares em tarefas e tickets. Fora do MVP.
 
 ---
 

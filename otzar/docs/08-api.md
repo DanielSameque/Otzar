@@ -21,8 +21,10 @@ A API deve ser organizada por recursos/domínios do sistema, mantendo separaçã
 * Usuários
 * Clientes
 * Projetos
+* Versões
 * Tarefas
 * Sprints
+* Tickets
 * Documentos
 * Comentários
 * Tags

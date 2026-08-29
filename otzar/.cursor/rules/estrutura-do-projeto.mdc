@@ -1,5 +1,5 @@
 ---
-alwaysApply: true
+alwaysApply: false
 ---
 ---
 
@@ -34,6 +34,7 @@ Exemplos:
 features/
 ├── auth/
 ├── tasks/
+├── tickets/
 ├── clients/
 ├── projects/
 ├── sprints/
