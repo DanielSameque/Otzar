@@ -1,9 +1,6 @@
 ---
-alwaysApply: true
----
----
 
-description: "Regras obrigatórias para consulta e manutenção da documentação"
+description: "Regras obrigatórias para consulta, manutenção e representação visual da documentação"
 globs: "**/*"
 alwaysApply: true
 -----------------
@@ -41,6 +38,69 @@ Não considerar uma tarefa concluída enquanto a documentação afetada não est
 * Atualizada; ou
 * Criada, quando inexistente.
 
+## Diagramas Mermaid
+
+Utilizar **Mermaid** na documentação sempre que um diagrama contribuir significativamente para a compreensão do conteúdo.
+
+O uso de Mermaid é **opcional** e deve ser baseado na relevância do diagrama.
+
+Utilizar Mermaid principalmente para representar:
+
+* Fluxos de processos;
+* Fluxos de navegação;
+* Arquitetura e relacionamento entre componentes;
+* Sequência de chamadas entre componentes, APIs ou serviços;
+* Estados e transições;
+* Relacionamentos entre entidades;
+* Processos com múltiplas etapas ou decisões;
+* Integrações entre sistemas.
+
+Não utilizar Mermaid quando:
+
+* O conteúdo for simples e puder ser compreendido facilmente apenas com texto;
+* O diagrama não acrescentar informação relevante;
+* O fluxo possuir poucas etapas;
+* O diagrama tornar a documentação mais complexa do que o próprio conteúdo.
+
+### Regra de decisão
+
+Antes de criar um diagrama, avaliar:
+
+> "Um diagrama torna esta informação significativamente mais fácil de entender do que texto ou uma lista?"
+
+Se a resposta for **sim**, utilizar Mermaid.
+
+Se a resposta for **não**, documentar apenas em texto, tabelas ou listas.
+
+### Exemplo
+
+Para representar um fluxo entre componentes:
+
+```mermaid
+flowchart LR
+    View --> Controller
+    Controller --> Service
+    Service --> Repository
+    Repository --> API
+```
+
+Para representar uma sequência de comunicação:
+
+```mermaid
+sequenceDiagram
+    Usuario->>View: Executa ação
+    View->>Controller: Solicita operação
+    Controller->>Service: Executa regra
+    Service->>Repository: Solicita dados
+    Repository->>API: Requisição
+    API-->>Repository: Resposta
+    Repository-->>Service: Dados
+    Service-->>Controller: Resultado
+    Controller-->>View: Atualiza interface
+```
+
+Os diagramas devem permanecer sincronizados com o comportamento atual do sistema. Sempre que uma alteração de código modificar o fluxo representado, o diagrama também deve ser atualizado.
+
 ## Localização
 
 Documentações do projeto devem ficar em:
@@ -70,12 +130,14 @@ Não criar documentação genérica ou redundante apenas para cumprir esta regra
 
 Documentar principalmente:
 
-* Regras de negócio.
-* Fluxos importantes.
-* Comportamentos não óbvios.
-* Integrações.
-* Decisões técnicas.
-* Rotinas relevantes.
+* Regras de negócio;
+* Fluxos importantes;
+* Comportamentos não óbvios;
+* Integrações;
+* Decisões técnicas;
+* Rotinas relevantes;
 * Configurações necessárias para funcionamento.
 
 A documentação deve ser objetiva, prática e suficiente para que outro desenvolvedor consiga entender e manter a rotina.
+
+A documentação e seus diagramas devem representar sempre o **estado atual do sistema**.
