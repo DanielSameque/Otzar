@@ -10,7 +10,7 @@ O foco do MVP não é possuir todas as funcionalidades planejadas, mas entregar 
 
 # Escopo do MVP
 
-O MVP será composto pelos seguintes módulos:
+O MVP será composto pelos seguintes módulos e recursos:
 
 ## 1. Autenticação
 
@@ -77,9 +77,11 @@ No MVP, como Sprints ainda não fazem parte do sistema, todas as tarefas aparece
 
 ---
 
-## 5. Kanban
+## 5. Visualização Kanban
 
-Visualização das tarefas organizadas por status.
+O Kanban **não é um módulo**: é uma visualização das tarefas organizadas por status, acessada dentro do módulo de Tarefas.
+
+É a única visualização entregue no MVP. Calendário, Tabela e Cronograma ficam para o Roadmap.
 
 A mudança entre Backlog, Kanban e outras visualizações futuras não altera os dados da tarefa.
 
@@ -142,8 +144,7 @@ As funcionalidades abaixo fazem parte do Roadmap, porém não serão implementad
 * Categorias e Tags
 * Comentários
 * Anexos
-* Calendário
-* Timeline
+* Visualizações Calendário, Tabela e Cronograma
 * Gestão de Tickets
 * Dashboard completo
 * Time Tracking

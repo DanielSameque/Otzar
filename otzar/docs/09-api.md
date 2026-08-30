@@ -8,7 +8,8 @@ A API é responsável por disponibilizar as funcionalidades do Otzar para o Fron
 
 * A API deve respeitar o Domain Model e as Regras de Negócio.
 * A API não deve conter regras exclusivas da interface.
-* Validações devem ocorrer no Back-end.
+* A API é o ponto onde as regras de negócio são efetivamente aplicadas. Toda validação definida em `04-regras-de-negocio.md` deve ocorrer no Back-end.
+* Nenhuma requisição deve ser considerada válida por já ter passado por uma validação no frontend.
 * Operações devem retornar respostas consistentes e previsíveis.
 * Erros devem possuir mensagens claras e códigos HTTP apropriados.
 * Dados sensíveis nunca devem ser expostos nas respostas.
@@ -46,14 +47,6 @@ A API deve ser organizada por recursos/domínios do sistema, mantendo separaçã
 * Autorizações devem ser verificadas no Back-end.
 * Usuários só podem acessar recursos aos quais possuem permissão.
 * Senhas nunca devem ser retornadas pela API.
-
-## Versionamento
-
-A API deve possuir versionamento para permitir evolução sem quebrar clientes existentes.
-
-Exemplo:
-
-`/api/v1/...`
 
 ## Documentação
 

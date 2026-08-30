@@ -1,6 +1,11 @@
 ---
+description: "Arquitetura do Otzar: MVVM + Service + Repository, Riverpod, Design Patterns, SOLID e testes"
+globs: **/*.dart
 alwaysApply: false
 ---
+
+# Arquitetura — Otzar
+
 ## MVVM
 
 ### View
@@ -28,13 +33,16 @@ Deve:
 
 ### Service
 
-Responsável pelas regras de negócio.
+Responsável por orquestrar a operação da feature no frontend.
 
 Pode:
 
-* Validar regras.
 * Coordenar múltiplos Repositories.
-* Executar operações de negócio.
+* Compor e preparar os dados de uma operação de tela.
+* Traduzir erros de negócio da API em falhas tratáveis pela ViewModel.
+* Aplicar validações de entrada já definidas pelo backend, apenas para retorno imediato ao usuário.
+
+Não deve definir regras de negócio próprias. O backend é a fonte de verdade, conforme a seção **Regras de negócio** desta regra.
 
 ### Repository
 
@@ -53,6 +61,25 @@ TaskRepository
  ↓
 ApiClient
 ```
+
+---
+
+## Regras de negócio
+
+As regras de negócio do Otzar são definidas e **validadas no backend**. O frontend não é uma barreira de segurança.
+
+No código Dart:
+
+* Não implementar regra de negócio que o backend não aplique.
+* Não impedir uma operação apenas no frontend assumindo que o backend aceitaria.
+* Reproduzir uma restrição na interface somente quando ela já existir no backend, e apenas para dar retorno imediato ao usuário.
+* Sempre tratar a rejeição vinda da API, mesmo quando a interface já tenta impedir a ação.
+
+Regra prática:
+
+> Uma validação só pode existir no frontend se o backend também a aplicar.
+
+As regras aplicadas pelo backend estão em `docs/04-regras-de-negocio.md`. Ao encontrar divergência entre o código Dart e esse documento, o documento prevalece.
 
 ---
 

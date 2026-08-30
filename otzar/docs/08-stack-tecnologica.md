@@ -190,11 +190,15 @@ Render — Site Estático
 
 ### Configuração
 
-* **Build Command:** `flutter build web --release`
+O ambiente de build do Render **não possui o SDK do Flutter pré-instalado**. Por isso, o `Build Command` instala o SDK antes de gerar o build.
+
+* **Build Command:** `./scripts/render-build.sh`
 * **Publish Directory:** `build/web`
 * **Rewrite (SPA):** `/*` → `/index.html`
 
-O SDK do Flutter não vem pré-instalado no ambiente de build do Render. Portanto, o build deve ser gerado por um script que instale o Flutter durante o build ou executado localmente, publicando o conteúdo de `build/web`.
+O script `scripts/render-build.sh`, versionado no repositório, baixa o canal `stable` do Flutter e executa o build. O passo a passo e o conteúdo do script estão em `12-ambiente-de-desenvolvimento.md`.
+
+Essa opção foi escolhida em vez de gerar o build localmente porque mantém o deploy automático a partir do Git e evita versionar a pasta `build/web`.
 
 O Site Estático serve apenas arquivos. Nenhuma regra de negócio ou credencial de banco deve existir nesta camada.
 

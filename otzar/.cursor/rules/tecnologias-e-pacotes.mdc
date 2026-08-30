@@ -1,22 +1,22 @@
 ---
+description: "Pacotes e escolhas tecnológicas do frontend Flutter do Otzar"
+globs: **/*.dart,pubspec.yaml
 alwaysApply: false
 ---
----
 
-description: "Pacotes, bibliotecas e escolhas tecnológicas do Otzar"
-globs: "**/*.dart"
-alwaysApply: true
------------------
+# Tecnologias e Pacotes — Frontend Flutter
 
-# Tecnologias e Pacotes — Otzar
+Esta regra define os pacotes e bibliotecas do **frontend Flutter**.
 
-Esta regra define os principais pacotes, bibliotecas e escolhas tecnológicas do projeto.
+A stack completa do Otzar, incluindo backend, ORM, banco de dados e hospedagem, está definida em `docs/08-stack-tecnologica.md`.
 
 Antes de adicionar uma nova dependência, verificar se uma das tecnologias já adotadas resolve o problema.
 
 ---
 
-## Pacotes Flutter/Dart
+## Dependências
+
+Pacotes declarados em `dependencies` no `pubspec.yaml`.
 
 ### http
 
@@ -25,19 +25,6 @@ Antes de adicionar uma nova dependência, verificar se uma das tecnologias já a
 Utilizar para requisições HTTP ao backend.
 
 Preferir `http` em vez de adicionar outra biblioteca HTTP sem necessidade.
-
----
-
-### freezed
-
-**Motivo:** criação de Models imutáveis e redução de código repetitivo.
-
-Utilizar principalmente para:
-
-* Models imutáveis.
-* `copyWith`.
-* Igualdade por valor.
-* Classes com estados/tipos distintos quando necessário.
 
 ---
 
@@ -102,37 +89,13 @@ https://pub.dev/packages/shimmer
 
 ## Serialização
 
-### json_serializable
-
-**Motivo:** conversão entre JSON da API e Models Dart.
-
-Utilizar em conjunto com Freezed quando necessário:
-
-```text
-JSON
- ↓
-Model.fromJson()
- ↓
-Objeto Dart
-```
-
-e:
-
-```text
-Objeto Dart
- ↓
-toJson()
- ↓
-JSON
-```
-
----
+As **anotações** ficam em `dependencies`, porque acompanham o código da aplicação. Os **geradores de código** ficam em `dev_dependencies`.
 
 ### freezed_annotation
 
-**Motivo:** disponibilizar as anotações utilizadas pelo Freezed nos Models.
+**Motivo:** disponibilizar nos Models as anotações utilizadas pelo Freezed.
 
-Utilizar junto com `freezed`.
+Utilizar junto com o gerador `freezed`.
 
 ---
 
@@ -141,6 +104,13 @@ Utilizar junto com `freezed`.
 **Motivo:** anotações utilizadas pelo `json_serializable`.
 
 Utilizar junto com a serialização dos Models.
+
+Conversão esperada:
+
+```text
+JSON            → Model.fromJson() → Objeto Dart
+Objeto Dart     → toJson()         → JSON
+```
 
 ---
 
@@ -178,9 +148,11 @@ https://material-foundation.github.io/material-theme-builder/
 
 ## Pacotes de desenvolvimento
 
+Pacotes declarados em `dev_dependencies` no `pubspec.yaml`. São geradores de código e não entram no build final da aplicação.
+
 ### build_runner
 
-**Motivo:** geração automática de código utilizado por Freezed e json_serializable.
+**Motivo:** executar a geração automática de código utilizada por Freezed e json_serializable.
 
 Utilizar somente durante o processo de geração de código.
 
@@ -188,13 +160,48 @@ Utilizar somente durante o processo de geração de código.
 
 ### freezed
 
-Pacote de desenvolvimento utilizado para gerar os Models definidos com Freezed.
+**Motivo:** gerar Models imutáveis e reduzir código repetitivo.
+
+Gerador de código. Utilizar principalmente para:
+
+* Models imutáveis.
+* `copyWith`.
+* Igualdade por valor.
+* Classes com estados/tipos distintos quando necessário.
+
+Depende de `freezed_annotation`, que fica em `dependencies`.
 
 ---
 
 ### json_serializable
 
-Pacote de desenvolvimento utilizado para gerar código de serialização JSON.
+**Motivo:** gerar a conversão entre o JSON da API e os Models Dart.
+
+Gerador de código. Utilizar em conjunto com Freezed quando o Model precisar de `fromJson`/`toJson`.
+
+Depende de `json_annotation`, que fica em `dependencies`.
+
+---
+
+## Classificação no pubspec.yaml
+
+```text
+dependencies:
+  http
+  go_router
+  flutter_riverpod
+  shared_preferences
+  shimmer
+  freezed_annotation
+  json_annotation
+
+dev_dependencies:
+  build_runner
+  freezed
+  json_serializable
+```
+
+Não declarar `freezed` nem `json_serializable` em `dependencies`.
 
 ---
 
@@ -209,17 +216,3 @@ Pacote de desenvolvimento utilizado para gerar código de serialização JSON.
 7. Antes de adicionar uma biblioteca, verificar sua compatibilidade com a versão atual do Flutter/Dart.
 8. Bibliotecas externas de UI devem ser evitadas quando o Material Design 3 nativo atender à necessidade.
 
-# Stack principal
-
-```text
-Flutter
-│
-├── Material Design 3
-├── Riverpod
-├── GoRouter
-├── http
-├── Freezed
-├── json_serializable
-├── SharedPreferences
-└── Shimmer
-```

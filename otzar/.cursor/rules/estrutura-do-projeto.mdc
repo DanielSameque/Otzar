@@ -1,12 +1,8 @@
 ---
+description: "Estrutura e organização dos arquivos do Otzar"
+globs: **/*.dart
 alwaysApply: false
 ---
----
-
-description: "Estrutura e organização dos arquivos do Otzar"
-globs: "**/*.dart"
-alwaysApply: true
------------------
 
 # Estrutura do Projeto — Otzar
 
@@ -152,7 +148,7 @@ O Repository não deve conter regras de negócio.
 
 # 4. Domain
 
-Contém as regras de negócio da Feature.
+Contém a orquestração das operações da Feature no frontend.
 
 ```text
 domain/
@@ -161,7 +157,7 @@ domain/
 
 ### services
 
-Contém os Services responsáveis pelas regras de negócio.
+Contém os Services que coordenam Repositories e preparam o resultado para a camada de apresentação.
 
 Exemplo:
 
@@ -169,7 +165,11 @@ Exemplo:
 task_service.dart
 ```
 
-Services podem utilizar Repositories para executar operações de negócio.
+Services podem utilizar Repositories para executar operações.
+
+As regras de negócio do Otzar são definidas e validadas no backend. Esta camada não redefine regras: ela apenas orquestra chamadas e trata os erros devolvidos pela API.
+
+Ver `docs/07-arquitetura.md` e `docs/04-regras-de-negocio.md`.
 
 ---
 

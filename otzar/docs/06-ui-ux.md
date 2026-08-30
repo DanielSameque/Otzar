@@ -17,7 +17,6 @@ A navegação principal deve organizar o sistema por contexto:
 * Projetos
 * Tarefas
 * Backlog (único e global)
-* Kanban
 * Sprints
 * Tickets
 * Clientes
@@ -25,6 +24,17 @@ A navegação principal deve organizar o sistema por contexto:
 * Usuários
 
 O Backlog não é por projeto. Filtro por projeto, quando existir, ocorre dentro do mesmo Backlog.
+
+O Kanban não é um item de navegação. Ele é uma visualização, acessada dentro de Tarefas e de Tickets.
+
+## Visualizações
+
+Tarefas e tickets podem ser exibidos como **Kanban**, **Calendário**, **Tabela** ou **Cronograma**.
+
+* A visualização é escolhida dentro da própria tela, por um seletor visível.
+* Trocar de visualização não altera os dados nem navega para outro módulo.
+* Filtros e ordenação permanecem aplicados ao trocar de visualização.
+* A preferência de visualização do usuário deve ser mantida ao retornar à tela.
 
 ## Tarefas
 

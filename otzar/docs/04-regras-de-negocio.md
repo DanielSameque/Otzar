@@ -1,5 +1,13 @@
 # Regras de Negócio
 
+Este documento é a fonte de verdade das regras de negócio do Otzar.
+
+## Onde as regras são aplicadas
+
+Todas as regras deste documento são implementadas e **validadas no backend (NestJS)**.
+
+O frontend pode reproduzir uma restrição na interface para dar retorno imediato ao usuário, mas essa reprodução nunca substitui a validação do backend e só é permitida quando a regra já existe no backend. Detalhamento em `07-arquitetura.md`.
+
 ## Organização
 
 * O Otzar opera para uma única organização. Não há multi-empresa.
@@ -59,3 +67,4 @@
 
 * Alterações nos relacionamentos devem preservar as regras do domínio.
 * As regras de negócio devem ser aplicadas independentemente da interface utilizada.
+* Uma regra alterada aqui deve ser alterada no backend. O frontend acompanha depois.

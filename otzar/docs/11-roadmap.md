@@ -16,7 +16,7 @@ Validar o conceito, a arquitetura e o fluxo principal do Otzar.
 * Projetos
 * Tarefas
 * Backlog
-* Kanban
+* Visualização Kanban das tarefas
 * Base de Conhecimento (acervo Markdown único)
 
 O escopo detalhado está definido em `10-mvp.md`.
@@ -35,8 +35,7 @@ Expandir os recursos de gerenciamento e acompanhamento.
 * Categorias e Tags
 * Comentários
 * Anexos
-* Calendário
-* Timeline
+* Visualizações Calendário, Tabela e Cronograma
 * Gestão de Tickets
 * Dashboard
 * Time Tracking

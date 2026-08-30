@@ -1,8 +1,7 @@
 ---
 description: "Regras obrigatórias para consulta, manutenção e representação visual da documentação"
-alwaysApply: false
+alwaysApply: true
 ---
------------------
 
 # Documentação
 

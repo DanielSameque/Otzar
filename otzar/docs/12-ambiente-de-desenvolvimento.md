@@ -409,7 +409,7 @@ flutter pub outdated
 
 # 🚀 Deploy (Flutter Web no Render)
 
-O frontend web é publicado como **Site Estático no Render**, no mesmo painel do backend NestJS, conforme `02-stack-tecnologica.md`.
+O frontend web é publicado como **Site Estático no Render**, no mesmo painel do backend NestJS, conforme `08-stack-tecnologica.md`.
 
 Não utilizar NGINX, Apache ou scripts de limpeza de `nginx.conf`. O Render serve os arquivos estáticos e o HTTPS.
 
@@ -429,13 +429,46 @@ build\web
 
 Não versionar segredos no build. A URL da API e demais configurações do ambiente devem ser definidas no painel do Render ou passadas no build com `--dart-define`.
 
+## Script de build do Render
+
+O ambiente de build do Render **não possui o SDK do Flutter pré-instalado**. O build é gerado por um script versionado no repositório, que instala o Flutter e compila a aplicação.
+
+Criar o arquivo `scripts/render-build.sh`:
+
+```bash
+#!/usr/bin/env bash
+set -e
+
+FLUTTER_VERSION="stable"
+FLUTTER_DIR="$HOME/flutter"
+
+if [ ! -d "$FLUTTER_DIR" ]; then
+  git clone https://github.com/flutter/flutter.git \
+    --branch "$FLUTTER_VERSION" --depth 1 "$FLUTTER_DIR"
+fi
+
+export PATH="$FLUTTER_DIR/bin:$PATH"
+
+flutter --version
+flutter pub get
+flutter build web --release
+```
+
+Dar permissão de execução antes de commitar:
+
+```powershell
+git update-index --chmod=+x scripts/render-build.sh
+```
+
+Essa abordagem foi escolhida em vez de gerar o build localmente porque mantém o deploy automático a cada push e evita versionar a pasta `build/web`.
+
 ## Publicar o Site Estático
 
 1. No Render, criar um serviço do tipo **Static Site** apontando para o repositório do Otzar.
 2. Configurar:
 
 ```text
-Build Command:      flutter build web --release
+Build Command:      ./scripts/render-build.sh
 Publish Directory:  build/web
 ```
 
@@ -447,13 +480,8 @@ Destination:  /index.html
 Action:       Rewrite
 ```
 
-4. Definir as variáveis do ambiente web (por exemplo, a URL da API) no painel do serviço.
+4. Definir as variáveis do ambiente web (por exemplo, a URL da API) no painel do serviço e repassá-las ao build com `--dart-define` dentro do script.
 5. Fazer o deploy a partir da branch de produção.
-
-O ambiente de build do Render não possui o SDK do Flutter pré-instalado. Há duas opções:
-
-* Instalar o Flutter durante o build por meio de um script no `Build Command`; ou
-* Gerar o build localmente e publicar o conteúdo de `build/web`.
 
 ## Backend e banco
 

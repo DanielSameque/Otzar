@@ -14,17 +14,13 @@ Criação, acompanhamento e organização das tarefas, incluindo status, priorid
 
 Visualização **global e única** das tarefas que não possuem Sprint associada. O projeto, quando houver, é apenas um filtro.
 
-## Kanban
-
-Visualização das tarefas organizadas por status. Opera sobre o mesmo conjunto de tarefas do sistema; não altera os dados.
-
 ## Sprints
 
 Planejamento e acompanhamento de ciclos de desenvolvimento e suas respectivas tarefas.
 
 ## Tickets
 
-Módulo principal de atendimento ao cliente: abertura, acompanhamento e organização dos chamados. Tickets possuem visualizações próprias (Kanban, calendário, tabela e cronograma) e não são tarefas com categoria de suporte.
+Módulo principal de atendimento ao cliente: abertura, acompanhamento e organização dos chamados. Tickets utilizam as mesmas visualizações das tarefas (Kanban, calendário, tabela e cronograma) e não são tarefas com categoria de suporte.
 
 ## Clientes
 
@@ -52,6 +48,18 @@ Recursos de colaboração e registro de informações complementares em tarefas 
 
 ---
 
+# O que não é módulo
+
+## Visualizações
+
+**Kanban**, **Calendário**, **Tabela** e **Cronograma** não são módulos. São formas de exibir as tarefas e os tickets, disponíveis dentro dos módulos de Tarefas e de Tickets.
+
+Todas operam sobre o mesmo conjunto de dados. Trocar de visualização não altera os dados nem cria um recorte próprio: apenas muda a apresentação.
+
+O Kanban organiza os registros por status e permite alterá-lo diretamente no quadro.
+
+---
+
 ### Regra
 
-Cada módulo deve respeitar o **Domain Model** definido em `04-modelo-de-dados.md` e não deve criar entidades ou relacionamentos que contradigam o modelo.
+Cada módulo deve respeitar o **Domain Model** definido em `03-modelo-de-dados.md` e não deve criar entidades ou relacionamentos que contradigam o modelo.

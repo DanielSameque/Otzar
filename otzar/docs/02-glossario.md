@@ -9,7 +9,8 @@
 | **Projeto**              | Agrupamento de informações relacionadas a um produto, sistema ou contrato.                      |
 | **Backlog**              | Visualização **global e única** das tarefas sem Sprint. Não é uma entidade persistida.         |
 | **Sprint**               | Ciclo de desenvolvimento que pode conter tarefas de diferentes projetos. Sem versão própria.    |
-| **Kanban**               | Visualização das tarefas (ou tickets) organizadas por status.                                   |
+| **Kanban**               | Visualização das tarefas (ou tickets) organizadas por status. Não é um módulo.                  |
+| **Visualização**         | Forma de exibir tarefas ou tickets (Kanban, Calendário, Tabela, Cronograma). Não altera dados.  |
 | **Subtarefa**            | Tarefa vinculada a outra tarefa por meio de uma relação pai/filho.                              |
 | **Cliente**              | Pessoa ou organização atendida. Vínculo com projeto, tarefa ou ticket é opcional e fora do MVP. |
 | **Usuário**              | Pessoa que utiliza o Otzar.                                                                     |
