@@ -16,6 +16,18 @@ C:\GitHub
 
 Clonar o repositório do Otzar dentro dessa pasta.
 
+### Estrutura do repositório
+
+O repositório contém as duas aplicações do Otzar:
+
+```text
+C:\GitHub\Otzar\
+├── otzar\      # Frontend Flutter (Web e mobile)
+└── backend\    # API REST NestJS
+```
+
+A documentação do projeto fica em `otzar\docs`.
+
 ---
 
 ## Flutter
@@ -35,6 +47,146 @@ Após a instalação, verificar:
 ```powershell
 flutter --version
 dart --version
+```
+
+---
+
+## Node.js
+
+O backend NestJS exige **Node.js 20 ou superior**.
+
+Baixar e instalar o **[Node.js LTS](https://nodejs.org)**.
+
+Verificar:
+
+```powershell
+node --version
+npm --version
+```
+
+---
+
+## PostgreSQL local
+
+O backend utiliza PostgreSQL. Em desenvolvimento existem duas opções:
+
+* **Docker** — subir o banco com o `docker-compose.yml` versionado em `backend\`.
+* **Neon** — apontar a `DATABASE_URL` para o banco gerenciado, conforme `08-stack-tecnologica.md`.
+
+Com Docker instalado:
+
+```powershell
+cd C:\GitHub\Otzar\backend
+docker compose up -d
+```
+
+O container expõe o PostgreSQL em `localhost:5432` com usuário, senha e banco `otzar`.
+
+A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"` em vez de impedir a inicialização. Isso permite desenvolver o frontend antes de configurar o PostgreSQL.
+
+---
+
+# ⚙️ Backend (NestJS)
+
+## Instalação das dependências
+
+```powershell
+cd C:\GitHub\Otzar\backend
+npm install
+```
+
+## Variáveis de ambiente
+
+Copiar o arquivo de exemplo e ajustar os valores:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+| Variável      | Finalidade                                                        |
+| ------------- | ----------------------------------------------------------------- |
+| `PORT`        | Porta da API. Padrão `3000`.                                      |
+| `CORS_ORIGIN` | Origens liberadas, separadas por vírgula. `*` libera todas.       |
+| `DATABASE_URL`| Conexão com o PostgreSQL.                                         |
+| `JWT_SECRET`  | Segredo do JWT, utilizado a partir do módulo de Autenticação.     |
+
+O arquivo `.env` não deve ser versionado.
+
+## Prisma
+
+O Prisma Client é gerado a partir do schema e **não é versionado**. Gerar após clonar o repositório e sempre que o schema mudar:
+
+```powershell
+npm run prisma:generate
+```
+
+A URL de conexão fica em `prisma.config.ts` e o `PrismaClient` recebe o adaptador `@prisma/adapter-pg`, conforme exigido pelo Prisma 7.
+
+> Não atualizar o Prisma com `npm install prisma@latest`. A tag `latest` do npm aponta para o CLI da Prisma Developer Platform, que é outro produto e não possui os comandos `generate` e `migrate`. O motivo está em `08-stack-tecnologica.md`.
+
+Para aplicar migrations quando existirem entidades:
+
+```powershell
+npm run prisma:migrate
+```
+
+## Executar
+
+```powershell
+npm run start:dev
+```
+
+A API sobe em `http://localhost:3000`. Verificar:
+
+```powershell
+curl http://localhost:3000/health
+```
+
+Resposta esperada:
+
+```json
+{ "status": "ok", "database": "up", "timestamp": "2026-08-30T01:31:33.796Z" }
+```
+
+---
+
+# ▶️ Executar o Otzar localmente
+
+O ambiente completo utiliza três terminais:
+
+```powershell
+# 1. Banco de dados (opcional enquanto não houver entidades)
+cd C:\GitHub\Otzar\backend
+docker compose up -d
+
+# 2. API
+cd C:\GitHub\Otzar\backend
+npm run start:dev
+
+# 3. Frontend
+cd C:\GitHub\Otzar\otzar
+flutter run -d chrome --dart-define=API_URL=http://localhost:3000
+```
+
+A URL da API nunca fica fixa no código: é lida de `API_URL` por `lib\core\config\app_config.dart`, que assume `http://localhost:3000` quando o valor não é informado.
+
+Para confirmar que o frontend conversa com a API, abrir o ícone de **Diagnóstico** na barra superior do aplicativo. A tela exibe o endereço consultado, o status da API e o estado da conexão com o banco.
+
+## Geração de código do frontend
+
+Os Models utilizam Freezed e json_serializable. Após alterar um Model:
+
+```powershell
+cd C:\GitHub\Otzar\otzar
+dart run build_runner build
+```
+
+## Verificações
+
+```powershell
+cd C:\GitHub\Otzar\otzar
+flutter analyze
+flutter test
 ```
 
 ---
@@ -413,18 +565,21 @@ O frontend web é publicado como **Site Estático no Render**, no mesmo painel d
 
 Não utilizar NGINX, Apache ou scripts de limpeza de `nginx.conf`. O Render serve os arquivos estáticos e o HTTPS.
 
+> O deploy ainda não foi configurado. Esta seção descreve o procedimento previsto para quando a publicação for realizada.
+
 ## Build local
 
 Para gerar o build web na pasta padrão do Flutter:
 
 ```powershell
-flutter build web --release
+cd C:\GitHub\Otzar\otzar
+flutter build web --release --dart-define=API_URL=https://<url-da-api>
 ```
 
 A saída fica em:
 
 ```text
-build\web
+otzar\build\web
 ```
 
 Não versionar segredos no build. A URL da API e demais configurações do ambiente devem ser definidas no painel do Render ou passadas no build com `--dart-define`.
@@ -433,7 +588,7 @@ Não versionar segredos no build. A URL da API e demais configurações do ambie
 
 O ambiente de build do Render **não possui o SDK do Flutter pré-instalado**. O build é gerado por um script versionado no repositório, que instala o Flutter e compila a aplicação.
 
-Criar o arquivo `scripts/render-build.sh`:
+Criar o arquivo `scripts/render-build.sh`, na raiz do repositório:
 
 ```bash
 #!/usr/bin/env bash
@@ -449,9 +604,11 @@ fi
 
 export PATH="$FLUTTER_DIR/bin:$PATH"
 
+cd otzar
+
 flutter --version
 flutter pub get
-flutter build web --release
+flutter build web --release --dart-define=API_URL="$API_URL"
 ```
 
 Dar permissão de execução antes de commitar:
@@ -469,7 +626,7 @@ Essa abordagem foi escolhida em vez de gerar o build localmente porque mantém o
 
 ```text
 Build Command:      ./scripts/render-build.sh
-Publish Directory:  build/web
+Publish Directory:  otzar/build/web
 ```
 
 3. Adicionar a regra de reescrita para SPA, necessária para as rotas do GoRouter:
@@ -480,13 +637,23 @@ Destination:  /index.html
 Action:       Rewrite
 ```
 
-4. Definir as variáveis do ambiente web (por exemplo, a URL da API) no painel do serviço e repassá-las ao build com `--dart-define` dentro do script.
+4. Definir `API_URL` nas variáveis do serviço. O script repassa o valor ao build com `--dart-define`.
 5. Fazer o deploy a partir da branch de produção.
 
-## Backend e banco
+## Publicar o backend
 
 O backend NestJS roda como **Web Service** no Render e o PostgreSQL fica no **Neon**.
 
-O frontend deve chamar apenas a API REST do NestJS via HTTPS. Como o Site Estático e o Web Service possuem domínios distintos, o backend precisa liberar a origem do frontend via CORS.
+Configurar o serviço com:
+
+```text
+Root Directory:  backend
+Build Command:   npm install && npm run prisma:generate && npm run build
+Start Command:   npm run start:prod
+```
+
+Definir `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN` nas variáveis do serviço. O `CORS_ORIGIN` deve conter a URL do Site Estático, já que frontend e backend possuem domínios distintos.
+
+O frontend deve chamar apenas a API REST do NestJS via HTTPS.
 
 Nos planos gratuitos, o Web Service hiberna após inatividade e o compute do Neon é suspenso quando ocioso, deixando a primeira requisição mais lenta.

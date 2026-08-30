@@ -1,0 +1,17 @@
+// Schema do Otzar.
+//
+// Nesta etapa existe apenas a configuração do Prisma. As entidades do domínio
+// (Usuário, Projeto, Tarefa, Ticket, Documento) serão adicionadas junto com os
+// módulos correspondentes, seguindo docs/03-modelo-de-dados.md.
+//
+// A URL de conexão fica em prisma.config.ts, e não neste arquivo (Prisma 7).
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}

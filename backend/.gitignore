@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Prisma Client gerado a partir do schema (npm run prisma:generate)
+generated/

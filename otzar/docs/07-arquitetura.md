@@ -42,7 +42,7 @@ View → ViewModel → Service → Repository → ApiClient → REST API
 
 A View nunca acessa diretamente Repository, ApiClient ou qualquer serviço de infraestrutura.
 
-A organização física dessas camadas em pastas está definida em `.cursor/rules/estrutura-do-projeto.mdc`.
+A organização física dessas camadas em pastas está definida em `.cursor/rules/flutter-estrutura-do-projeto.mdc`.
 
 ---
 
@@ -135,8 +135,9 @@ As regras de negócio são testadas no backend, onde são efetivamente aplicadas
 
 # Documentos relacionados
 
-* `.cursor/rules/arquitetura.mdc` — padrões de implementação da arquitetura no código Dart.
-* `.cursor/rules/estrutura-do-projeto.mdc` — organização das pastas e arquivos.
+* `arquitetura/fundacao.md` — o que a fundação já implementa e como conectar uma nova Feature.
+* `.cursor/rules/flutter-arquitetura.mdc` — padrões de implementação da arquitetura no código Dart.
+* `.cursor/rules/flutter-estrutura-do-projeto.mdc` — organização das pastas e arquivos.
 * `04-regras-de-negocio.md` — regras aplicadas pelo backend.
 * `08-stack-tecnologica.md` — tecnologias, hospedagem e comunicação.
 * `09-api.md` — princípios e padrões da API REST.

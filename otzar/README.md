@@ -1,17 +1,23 @@
-# otzar
+# Otzar
 
-A new Flutter project.
+Frontend Flutter do Otzar, uma plataforma de gestão de projetos, tarefas, tickets e base de conhecimento para equipes de desenvolvimento e suporte.
 
-## Getting Started
+A API REST fica em `..\backend`.
 
-This project is a starting point for a Flutter application.
+## Executar
 
-A few resources to get you started if this is your first Flutter project:
+```powershell
+flutter pub get
+flutter run -d chrome --dart-define=API_URL=http://localhost:3000
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Para conferir a conexão com a API, abrir o ícone de diagnóstico na barra superior.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Documentação
+
+A documentação do projeto está em [`docs/`](docs):
+
+- [Visão geral](docs/01-visao-geral.md)
+- [Arquitetura](docs/07-arquitetura.md) e [fundação da aplicação](docs/arquitetura/fundacao.md)
+- [Escopo do MVP](docs/10-mvp.md)
+- [Ambiente de desenvolvimento](docs/12-ambiente-de-desenvolvimento.md)

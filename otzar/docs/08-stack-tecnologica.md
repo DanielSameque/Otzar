@@ -140,6 +140,33 @@ PostgreSQL
 
 O Prisma deverá permanecer concentrado na camada de acesso a dados, evitando que Controllers ou outras camadas da aplicação acessem o banco diretamente.
 
+### Versão adotada
+
+O Otzar utiliza o **Prisma ORM 7**, versão mais recente do ORM. Os três pacotes são fixados em `^7.10.0`:
+
+```text
+prisma               # CLI do ORM
+@prisma/client       # runtime consultado pela aplicação
+@prisma/adapter-pg   # driver adapter do PostgreSQL
+```
+
+A partir da versão 7, o ORM exige a URL de conexão em `prisma.config.ts` e um driver adapter passado ao `PrismaClient`. A `url` deixou de ser aceita no bloco `datasource` do schema.
+
+### Por que não a versão 8
+
+O pacote `prisma@8` **não é uma versão mais nova do ORM**: é o CLI da **Prisma Developer Platform**, um produto distinto, voltado a autenticação, projetos, buckets, deploy e ao banco gerenciado Prisma Postgres. Nele o ORM passa a ser o subcomando `prisma orm`, que inicializa projetos no modelo "Prisma Next".
+
+A versão 8 não foi adotada porque:
+
+* Não existe `@prisma/client` nem `@prisma/adapter-pg` na versão 8. O runtime consumido pela aplicação só existe até a 7.10.0.
+* O CLI 8 não expõe `generate` nem `migrate` no nível principal, quebrando os scripts `prisma:generate` e `prisma:migrate` do backend.
+* A versão publicada é *release candidate*, não estável.
+* A plataforma é orientada ao Prisma Postgres, enquanto o Otzar hospeda o banco no **Neon** e a aplicação no **Render**.
+
+O CLI 8 é publicado sob a tag `latest` do npm. Por isso os pacotes são fixados explicitamente em `^7.10.0`: um `npm install` sem restrição instala o CLI da plataforma e quebra a geração do Prisma Client.
+
+Essa decisão deve ser reavaliada quando o `@prisma/client` na versão 8 for publicado como estável.
+
 ---
 
 # 🐘 Banco de Dados — PostgreSQL
