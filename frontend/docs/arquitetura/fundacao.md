@@ -10,7 +10,7 @@ Nenhuma regra de negócio do MVP está implementada. A fundação entrega apenas
 
 ```text
 C:\GitHub\Otzar\
-├── otzar\      # Frontend Flutter
+├── frontend\   # Frontend Flutter
 └── backend\    # API REST NestJS
 ```
 

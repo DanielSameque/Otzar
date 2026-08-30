@@ -22,11 +22,11 @@ O repositório contém as duas aplicações do Otzar:
 
 ```text
 C:\GitHub\Otzar\
-├── otzar\      # Frontend Flutter (Web e mobile)
+├── frontend\   # Frontend Flutter (Web e mobile)
 └── backend\    # API REST NestJS
 ```
 
-A documentação do projeto fica em `otzar\docs`.
+A documentação do projeto fica em `frontend\docs`.
 
 ---
 
@@ -164,7 +164,7 @@ cd C:\GitHub\Otzar\backend
 npm run start:dev
 
 # 3. Frontend
-cd C:\GitHub\Otzar\otzar
+cd C:\GitHub\Otzar\frontend
 flutter run -d chrome --dart-define=API_URL=http://localhost:3000
 ```
 
@@ -177,14 +177,14 @@ Para confirmar que o frontend conversa com a API, abrir o ícone de **Diagnósti
 Os Models utilizam Freezed e json_serializable. Após alterar um Model:
 
 ```powershell
-cd C:\GitHub\Otzar\otzar
+cd C:\GitHub\Otzar\frontend
 dart run build_runner build
 ```
 
 ## Verificações
 
 ```powershell
-cd C:\GitHub\Otzar\otzar
+cd C:\GitHub\Otzar\frontend
 flutter analyze
 flutter test
 ```
@@ -572,14 +572,14 @@ Não utilizar NGINX, Apache ou scripts de limpeza de `nginx.conf`. O Render serv
 Para gerar o build web na pasta padrão do Flutter:
 
 ```powershell
-cd C:\GitHub\Otzar\otzar
+cd C:\GitHub\Otzar\frontend
 flutter build web --release --dart-define=API_URL=https://<url-da-api>
 ```
 
 A saída fica em:
 
 ```text
-otzar\build\web
+frontend\build\web
 ```
 
 Não versionar segredos no build. A URL da API e demais configurações do ambiente devem ser definidas no painel do Render ou passadas no build com `--dart-define`.
@@ -604,7 +604,7 @@ fi
 
 export PATH="$FLUTTER_DIR/bin:$PATH"
 
-cd otzar
+cd frontend
 
 flutter --version
 flutter pub get
@@ -626,7 +626,7 @@ Essa abordagem foi escolhida em vez de gerar o build localmente porque mantém o
 
 ```text
 Build Command:      ./scripts/render-build.sh
-Publish Directory:  otzar/build/web
+Publish Directory:  frontend/build/web
 ```
 
 3. Adicionar a regra de reescrita para SPA, necessária para as rotas do GoRouter:
