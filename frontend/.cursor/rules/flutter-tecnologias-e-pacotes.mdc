@@ -74,6 +74,14 @@ Não utilizar para senhas, tokens ou informações sensíveis.
 
 ---
 
+### google_fonts
+
+**Motivo:** carregar a tipografia do Otzar (Inter) a partir do Google Fonts.
+
+Utilizar em `app_text_theme.dart` para montar o `TextTheme` aplicado em `AppTheme`.
+
+---
+
 ### shimmer
 
 **Motivo:** criação de efeitos de carregamento no estilo Skeleton.
@@ -191,6 +199,7 @@ dependencies:
   go_router
   flutter_riverpod
   shared_preferences
+  google_fonts
   shimmer
   freezed_annotation
   json_annotation

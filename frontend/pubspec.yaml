@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.5.5
 
   # Interface
+  google_fonts: ^6.3.2
   shimmer: ^4.0.0
 
   # Anotações dos Models (os geradores ficam em dev_dependencies)

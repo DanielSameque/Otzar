@@ -53,13 +53,9 @@ flowchart TB
 
 ## Tema
 
-Todo o esquema de cores é derivado de uma única semente:
+O esquema de cores claro e escuro está definido em `AppColors`, exportado do Material Theme Builder (paleta neutra em tons de cinza). A tipografia usa a fonte **Inter** via `google_fonts`, montada em `app_text_theme.dart`.
 
-```dart
-static const Color seed = Color(0xFF1B5E8C);
-```
-
-Para trocar a identidade visual, altere `AppColors.seed` ou substitua `AppColors.light` e `AppColors.dark` por uma paleta exportada do Material Theme Builder. As Features nunca escrevem cores diretamente: obtêm tudo de `Theme.of(context)`.
+Para trocar a identidade visual, substitua `AppColors.lightScheme()` e `AppColors.darkScheme()` por uma nova paleta exportada do Material Theme Builder. As Features nunca escrevem cores diretamente: obtêm tudo de `Theme.of(context)`.
 
 A preferência entre tema claro e escuro é alternada pela barra superior e persistida localmente.
 

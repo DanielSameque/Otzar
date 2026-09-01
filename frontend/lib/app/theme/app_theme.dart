@@ -7,13 +7,23 @@ import 'app_colors.dart';
 /// As telas devem obter cores e tipografia a partir de `Theme.of(context)`.
 /// Nenhuma cor deve ser escrita diretamente nas features.
 abstract final class AppTheme {
-  static final ThemeData light = _themeFor(AppColors.light);
+  static ThemeData light(TextTheme textTheme) =>
+      _themeFor(AppColors.light, textTheme);
 
-  static final ThemeData dark = _themeFor(AppColors.dark);
+  static ThemeData dark(TextTheme textTheme) =>
+      _themeFor(AppColors.dark, textTheme);
 
-  static ThemeData _themeFor(ColorScheme colorScheme) {
+  static ThemeData _themeFor(ColorScheme colorScheme, TextTheme textTheme) {
     return ThemeData(
+      useMaterial3: true,
+      brightness: colorScheme.brightness,
       colorScheme: colorScheme,
+      textTheme: textTheme.apply(
+        bodyColor: colorScheme.onSurface,
+        displayColor: colorScheme.onSurface,
+      ),
+      scaffoldBackgroundColor: colorScheme.surface,
+      canvasColor: colorScheme.surface,
       // O Otzar prioriza desktop e web, onde a densidade adaptativa aproveita
       // melhor o espaço disponível.
       visualDensity: VisualDensity.adaptivePlatformDensity,
