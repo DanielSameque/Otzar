@@ -1,0 +1,149 @@
+---
+description: "Arquitetura do backend Otzar: Controller → Service → Prisma, validação, erros e regras de negócio"
+globs: backend/**/*.ts
+alwaysApply: false
+---
+
+# Arquitetura — Backend NestJS
+
+## Camadas
+
+### Controller
+
+Responsável somente por rotas HTTP e delegação ao Service.
+
+Não deve conter:
+
+* Regras de negócio.
+* Acesso direto ao Prisma.
+* Lógica de persistência.
+
+### Service
+
+Responsável por regras de negócio, orquestração e validações de domínio.
+
+Deve:
+
+* Aplicar as regras de `frontend/docs/04-regras-de-negocio.md`.
+* Validar dados recebidos, independentemente do que o frontend enviou.
+* Rejeitar operações inválidas com `HttpException` e código HTTP apropriado.
+* Acessar o banco exclusivamente via `PrismaService`.
+
+Não deve conhecer detalhes de Request/Response do Express.
+
+### PrismaService
+
+Responsável pelo acesso ao banco via Prisma Client.
+
+Não deve conter regra de negócio.
+
+Exemplo:
+
+```text
+TaskController
+ ↓
+TaskService
+ ↓
+PrismaService
+```
+
+---
+
+## Regras de negócio
+
+O backend é a **única fonte de verdade** das regras de negócio, conforme `frontend/docs/07-arquitetura.md`.
+
+* Nenhuma requisição deve ser considerada válida por já ter passado por validação no frontend.
+* Toda regra descrita em `frontend/docs/04-regras-de-negocio.md` deve ser aplicada no Service.
+* Ao encontrar divergência entre o código e esse documento, o documento prevalece.
+
+---
+
+## DTOs e validação
+
+Utilizar `class-validator` e `class-transformer` nos DTOs de entrada.
+
+O `ValidationPipe` global já está configurado com:
+
+* `whitelist: true` — remove propriedades não declaradas no DTO.
+* `forbidNonWhitelisted: true` — rejeita propriedades extras com `400`.
+* `transform: true` — converte tipos automaticamente.
+
+---
+
+## Formato de erro
+
+Toda falha deve seguir o formato definido em `frontend/docs/09-api.md` e implementado em `src/common/filters/all-exceptions.filter.ts`:
+
+```json
+{
+  "statusCode": 400,
+  "error": "Bad Request",
+  "message": "descrição do erro",
+  "path": "/recurso",
+  "timestamp": "2026-08-30T01:21:08.299Z"
+}
+```
+
+Erros inesperados respondem `500` com mensagem genérica. Detalhes internos ficam apenas no log.
+
+---
+
+## REST
+
+Seguir padrões REST conforme `frontend/docs/09-api.md`:
+
+```text
+GET     → consultar
+POST    → criar
+PUT     → atualizar
+PATCH   → atualização parcial
+DELETE  → excluir
+```
+
+Preferir recursos nomeados:
+
+```text
+GET    /tasks
+GET    /tasks/:id
+POST   /tasks
+PUT    /tasks/:id
+DELETE /tasks/:id
+```
+
+---
+
+## Módulos NestJS
+
+Cada recurso da API deve ter seu próprio módulo:
+
+```text
+src/<recurso>/
+├── <recurso>.module.ts
+├── <recurso>.controller.ts
+├── <recurso>.service.ts
+└── dto/
+```
+
+Registrar novos módulos em `app.module.ts`.
+
+Documentar endpoints em `backend/docs/endpoints/<recurso>.md`.
+
+---
+
+## Testes
+
+Priorizar testes para:
+
+* Services (regras de negócio).
+* Controllers (integração HTTP, quando relevante).
+
+As regras de negócio são testadas no backend, onde são efetivamente aplicadas.
+
+---
+
+## Documentação relacionada
+
+* `backend/docs/arquitetura/fundacao.md` — o que a fundação já implementa.
+* `frontend/docs/09-api.md` — princípios e padrões da API REST.
+* `frontend/docs/03-modelo-de-dados.md` — entidades para o schema Prisma.

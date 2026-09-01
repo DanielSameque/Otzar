@@ -26,7 +26,7 @@ C:\GitHub\Otzar\
 └── backend\    # API REST NestJS
 ```
 
-A documentação do projeto fica em `frontend\docs`.
+A documentação do produto fica em `frontend\docs`. A documentação técnica do backend fica em `backend\docs`. O mapa completo do monorepo está em `docs\README.md`.
 
 ---
 
@@ -88,64 +88,16 @@ A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"
 
 # ⚙️ Backend (NestJS)
 
-## Instalação das dependências
+Instalação, variáveis de ambiente, Prisma, scripts e deploy do backend estão documentados em [`backend/docs/ambiente-de-desenvolvimento.md`](../../backend/docs/ambiente-de-desenvolvimento.md).
+
+Resumo para subir a API:
 
 ```powershell
 cd C:\GitHub\Otzar\backend
 npm install
-```
-
-## Variáveis de ambiente
-
-Copiar o arquivo de exemplo e ajustar os valores:
-
-```powershell
 Copy-Item .env.example .env
-```
-
-| Variável      | Finalidade                                                        |
-| ------------- | ----------------------------------------------------------------- |
-| `PORT`        | Porta da API. Padrão `3000`.                                      |
-| `CORS_ORIGIN` | Origens liberadas, separadas por vírgula. `*` libera todas.       |
-| `DATABASE_URL`| Conexão com o PostgreSQL.                                         |
-| `JWT_SECRET`  | Segredo do JWT, utilizado a partir do módulo de Autenticação.     |
-
-O arquivo `.env` não deve ser versionado.
-
-## Prisma
-
-O Prisma Client é gerado a partir do schema e **não é versionado**. Gerar após clonar o repositório e sempre que o schema mudar:
-
-```powershell
 npm run prisma:generate
-```
-
-A URL de conexão fica em `prisma.config.ts` e o `PrismaClient` recebe o adaptador `@prisma/adapter-pg`, conforme exigido pelo Prisma 7.
-
-> Não atualizar o Prisma com `npm install prisma@latest`. A tag `latest` do npm aponta para o CLI da Prisma Developer Platform, que é outro produto e não possui os comandos `generate` e `migrate`. O motivo está em `08-stack-tecnologica.md`.
-
-Para aplicar migrations quando existirem entidades:
-
-```powershell
-npm run prisma:migrate
-```
-
-## Executar
-
-```powershell
 npm run start:dev
-```
-
-A API sobe em `http://localhost:3000`. Verificar:
-
-```powershell
-curl http://localhost:3000/health
-```
-
-Resposta esperada:
-
-```json
-{ "status": "ok", "database": "up", "timestamp": "2026-08-30T01:31:33.796Z" }
 ```
 
 ---
@@ -642,9 +594,9 @@ Action:       Rewrite
 
 ## Publicar o backend
 
-O backend NestJS roda como **Web Service** no Render e o PostgreSQL fica no **Neon**.
+Detalhes de deploy no Render estão em [`backend/docs/ambiente-de-desenvolvimento.md`](../../backend/docs/ambiente-de-desenvolvimento.md).
 
-Configurar o serviço com:
+Resumo:
 
 ```text
 Root Directory:  backend

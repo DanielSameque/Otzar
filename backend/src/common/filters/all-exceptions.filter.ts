@@ -17,7 +17,7 @@ interface ErrorBody {
 }
 
 // Garante que toda falha da API tenha o mesmo formato de resposta,
-// conforme docs/09-api.md. Erros inesperados não expõem detalhes internos.
+// conforme frontend/docs/09-api.md. Erros inesperados não expõem detalhes internos.
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);

@@ -60,4 +60,4 @@ Cada recurso da API deve possuir documentação contendo:
 * Códigos de erro
 * Regras de autorização
 
-A documentação da API deve ser atualizada sempre que seu comportamento for alterado.
+A documentação da API deve ser atualizada sempre que seu comportamento for alterado. Os contratos de endpoints ficam em `backend/docs/endpoints/`.

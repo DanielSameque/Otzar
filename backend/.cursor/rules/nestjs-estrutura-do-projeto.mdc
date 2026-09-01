@@ -1,0 +1,115 @@
+---
+description: "Estrutura e organização dos arquivos do backend NestJS do Otzar"
+globs: backend/**/*.ts
+alwaysApply: false
+---
+
+# Estrutura do Projeto — Backend
+
+O backend deve ser organizado por **módulos de domínio**, cada um com Controller, Service e DTOs.
+
+## Estrutura padrão
+
+```text
+backend/
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+├── prisma.config.ts
+├── generated/prisma/          # Prisma Client (gerado, não versionado)
+├── src/
+│   ├── main.ts
+│   ├── app.module.ts
+│   ├── common/
+│   │   └── filters/
+│   ├── prisma/
+│   └── <modulo>/
+└── docs/
+```
+
+---
+
+# 1. Módulos de domínio
+
+Cada recurso da API deve ter sua pasta em `src/`.
+
+Exemplos futuros:
+
+```text
+src/
+├── auth/
+├── users/
+├── clients/
+├── projects/
+├── tasks/
+├── sprints/
+├── tickets/
+└── documents/
+```
+
+Um módulo deve conter apenas código relacionado à sua responsabilidade.
+
+Estrutura de um módulo:
+
+```text
+src/tasks/
+├── tasks.module.ts
+├── tasks.controller.ts
+├── tasks.service.ts
+└── dto/
+    ├── create-task.dto.ts
+    └── update-task.dto.ts
+```
+
+---
+
+# 2. Infraestrutura compartilhada
+
+## `common/`
+
+Código transversal à API: filtros, guards, interceptors, pipes e decorators reutilizáveis.
+
+## `prisma/`
+
+`PrismaModule` (global) e `PrismaService`. Todo acesso ao banco passa por aqui.
+
+Não acessar `PrismaClient` diretamente fora de `PrismaService`, exceto em testes.
+
+---
+
+# 3. Prisma e entidades
+
+Entidades do domínio ficam em `prisma/schema.prisma`, seguindo `frontend/docs/03-modelo-de-dados.md`.
+
+Após alterar o schema:
+
+```powershell
+npm run prisma:generate
+npm run prisma:migrate
+```
+
+O client gerado fica em `generated/prisma/` e não deve ser versionado.
+
+---
+
+# 4. Configuração
+
+Variáveis de ambiente lidas via `@nestjs/config` (`ConfigModule.forRoot({ isGlobal: true })`).
+
+Referência de variáveis em `.env.example`. Documentação em `backend/docs/ambiente-de-desenvolvimento.md`.
+
+Nunca versionar `.env`.
+
+---
+
+# 5. Documentação
+
+| Tipo | Local |
+| ---- | ----- |
+| Implementação do backend | `backend/docs/` |
+| Requisitos, regras de negócio, modelo de dados | `frontend/docs/` |
+| Endpoints da API | `backend/docs/endpoints/<recurso>.md` |
+
+Ao criar um novo módulo, documentar seus endpoints em `backend/docs/endpoints/`.
+
+Ver `backend/docs/arquitetura/fundacao.md` para o passo a passo de adicionar um módulo.

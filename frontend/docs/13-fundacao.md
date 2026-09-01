@@ -125,60 +125,9 @@ Esta tela existe para validar o ambiente e serve como exemplo mínimo do fluxo e
 
 # Backend
 
-## Estrutura
+A fundação do backend (bootstrap, Prisma, formato de erros, `GET /health` e como adicionar módulos) está documentada em [`backend/docs/arquitetura/fundacao.md`](../../backend/docs/arquitetura/fundacao.md).
 
-```text
-backend/
-├── prisma/schema.prisma      # configuração do Prisma (sem entidades ainda)
-├── prisma.config.ts          # URL de conexão (Prisma 7)
-├── src/
-│   ├── main.ts               # CORS, ValidationPipe e filtro de exceções
-│   ├── app.module.ts
-│   ├── common/filters/       # formato único de erro da API
-│   ├── prisma/               # PrismaService global
-│   └── health/               # GET /health
-└── docker-compose.yml        # PostgreSQL local
-```
-
-## Configuração global
-
-O `main.ts` aplica, para toda a API:
-
-* **CORS** conforme `CORS_ORIGIN`, permitindo que o Site Estático chame o Web Service.
-* **ValidationPipe** global com `whitelist`, `forbidNonWhitelisted` e `transform`, aplicado aos DTOs de cada módulo.
-* **Filtro de exceções** que padroniza as respostas de erro.
-
-## Formato de erro
-
-Toda falha responde no mesmo formato, conforme `09-api.md`:
-
-```json
-{
-  "statusCode": 404,
-  "error": "Not Found",
-  "message": "Cannot GET /nao-existe",
-  "path": "/nao-existe",
-  "timestamp": "2026-08-30T01:21:08.299Z"
-}
-```
-
-Erros inesperados respondem `500` com mensagem genérica: detalhes internos ficam apenas no log.
-
-## Banco de dados
-
-O Otzar utiliza o **Prisma ORM 7**, versão mais recente do ORM. O motivo de não adotar o `prisma@8`, que é o CLI de outro produto, está em `08-stack-tecnologica.md`.
-
-O Prisma 7 exige a URL de conexão em `prisma.config.ts` e um adaptador de driver no `PrismaClient`. O `PrismaService` instancia o `@prisma/adapter-pg` a partir de `DATABASE_URL`.
-
-O Prisma Client é gerado em `backend/generated/` e **não é versionado**. Executar `npm run prisma:generate` após clonar o repositório e a cada alteração do schema.
-
-A API sobe mesmo com o banco indisponível: a falha de conexão é registrada como aviso e `GET /health` responde `database: "down"`. Isso permite desenvolver o frontend antes de configurar o PostgreSQL. Uma `DATABASE_URL` ausente, por outro lado, impede a inicialização.
-
-## GET /health
-
-```json
-{ "status": "ok", "database": "up", "timestamp": "2026-08-30T01:31:33.796Z" }
-```
+O ambiente de desenvolvimento do backend está em [`backend/docs/ambiente-de-desenvolvimento.md`](../../backend/docs/ambiente-de-desenvolvimento.md).
 
 ---
 
@@ -191,7 +140,7 @@ A API sobe mesmo com o banco indisponível: a falha de conexão é registrada co
 5. Criar a ViewModel em `presentation/view_models/` expondo `AsyncValue`.
 6. Criar a View em `presentation/views/`, tratando carregando, vazio, sucesso e erro.
 7. Registrar a rota em `app/router/app_routes.dart` e `app/router/app_router.dart`, substituindo a `SectionPlaceholderView` correspondente.
-8. Criar o módulo equivalente no backend, com Controller, Service e DTOs validados.
+8. Criar o módulo equivalente no backend, conforme [`backend/docs/arquitetura/fundacao.md`](../../backend/docs/arquitetura/fundacao.md).
 
 O backend continua sendo a única fonte de verdade das regras de negócio, conforme `07-arquitetura.md`.
 

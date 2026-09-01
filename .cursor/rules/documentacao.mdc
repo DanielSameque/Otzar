@@ -1,5 +1,5 @@
 ---
-description: "Regras obrigatórias para consulta, manutenção e representação visual da documentação"
+description: "Regras obrigatórias para consulta, manutenção e representação visual da documentação do monorepo Otzar"
 alwaysApply: true
 ---
 
@@ -69,33 +69,6 @@ Se a resposta for **sim**, utilizar Mermaid.
 
 Se a resposta for **não**, documentar apenas em texto, tabelas ou listas.
 
-### Exemplo
-
-Para representar um fluxo entre componentes:
-
-```mermaid
-flowchart LR
-    View --> ViewModel
-    ViewModel --> Service
-    Service --> Repository
-    Repository --> API
-```
-
-Para representar uma sequência de comunicação:
-
-```mermaid
-sequenceDiagram
-    Usuario->>View: Executa ação
-    View->>ViewModel: Solicita operação
-    ViewModel->>Service: Executa regra
-    Service->>Repository: Solicita dados
-    Repository->>API: Requisição
-    API-->>Repository: Resposta
-    Repository-->>Service: Dados
-    Service-->>ViewModel: Resultado
-    ViewModel-->>View: Atualiza interface
-```
-
 Os diagramas devem permanecer sincronizados com o comportamento atual do sistema. Sempre que uma alteração de código modificar o fluxo representado, o diagrama também deve ser atualizado.
 
 ## Localização no monorepo
@@ -111,11 +84,11 @@ backend/docs/          # Documentação técnica do backend
 | O que documentar | Onde criar |
 | ---------------- | ---------- |
 | Requisitos, regras de negócio, modelo de dados, princípios da API | `frontend/docs/` |
-| Implementação do frontend | `frontend/docs/` |
-| Implementação do backend | `backend/docs/` |
+| Implementação do frontend (fundação, features, UI) | `frontend/docs/` |
+| Implementação do backend (fundação, módulos, endpoints) | `backend/docs/` |
 | Contratos de endpoints REST | `backend/docs/endpoints/` |
 
-Consultar `docs/README.md` na raiz do repositório para o mapa completo.
+Consultar `docs/README.md` para o mapa completo.
 
 ## Importante
 

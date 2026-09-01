@@ -135,9 +135,22 @@ As regras de negócio são testadas no backend, onde são efetivamente aplicadas
 
 # Documentos relacionados
 
-* `arquitetura/fundacao.md` — o que a fundação já implementa e como conectar uma nova Feature.
+## Frontend
+
+* `13-fundacao.md` — o que a fundação já implementa e como conectar uma nova Feature.
 * `.cursor/rules/flutter-arquitetura.mdc` — padrões de implementação da arquitetura no código Dart.
 * `.cursor/rules/flutter-estrutura-do-projeto.mdc` — organização das pastas e arquivos.
+
+## Backend
+
+* [`backend/docs/arquitetura/fundacao.md`](../../backend/docs/arquitetura/fundacao.md) — bootstrap, Prisma, erros e como adicionar módulos.
+* [`backend/docs/endpoints/`](../../backend/docs/endpoints/) — contratos dos endpoints da API.
+* `backend/.cursor/rules/nestjs-arquitetura.mdc` — padrões Controller → Service → Prisma.
+* `backend/.cursor/rules/nestjs-estrutura-do-projeto.mdc` — organização das pastas do backend.
+
+## Compartilhados
+
 * `04-regras-de-negocio.md` — regras aplicadas pelo backend.
 * `08-stack-tecnologica.md` — tecnologias, hospedagem e comunicação.
 * `09-api.md` — princípios e padrões da API REST.
+* [`docs/README.md`](../../docs/README.md) — mapa da documentação do monorepo.

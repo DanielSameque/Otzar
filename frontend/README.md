@@ -15,9 +15,10 @@ Para conferir a conexão com a API, abrir o ícone de diagnóstico na barra supe
 
 ## Documentação
 
-A documentação do projeto está em [`docs/`](docs):
+A documentação do produto está em [`docs/`](docs). A documentação técnica do backend está em [`../backend/docs/`](../backend/docs). O mapa completo do monorepo está em [`../docs/README.md`](../docs/README.md).
 
 - [Visão geral](docs/01-visao-geral.md)
-- [Arquitetura](docs/07-arquitetura.md) e [fundação da aplicação](docs/arquitetura/fundacao.md)
+- [Arquitetura](docs/07-arquitetura.md) e [fundação do frontend](docs/13-fundacao.md)
+- [Fundação do backend](../backend/docs/arquitetura/fundacao.md)
 - [Escopo do MVP](docs/10-mvp.md)
 - [Ambiente de desenvolvimento](docs/12-ambiente-de-desenvolvimento.md)
