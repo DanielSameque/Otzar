@@ -9,7 +9,7 @@ Otzar/
 └── docs/       # Mapa da documentação do monorepo
 ```
 
-## Executar localmente 
+## Executar localmente
 
 ```powershell
 # Backend
