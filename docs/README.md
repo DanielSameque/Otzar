@@ -17,6 +17,14 @@ Otzar/
 
 ---
 
+# Onboarding
+
+| Documento | Assunto |
+| --------- | ------- |
+| [Plano de estudo](plano-de-estudo.md) | Roteiro de aprendizado: Cursor, IA, produto e stack |
+
+---
+
 # Onde documentar o quê
 
 | Conteúdo | Local | Exemplos |
