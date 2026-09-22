@@ -155,8 +155,8 @@ Ordem de leitura sugerida:
 ## Pontos principais do domínio
 
 - Uma organização; projetos, backlog, sprints (roadmap), tarefas
-- **Ticket ≠ tarefa** (suporte é entidade própria)
-- Base de conhecimento: **um** acervo Markdown, vínculos N:N
+- **Ticket ≠ tarefa** (suporte é entidade própria; tickets fazem parte do MVP)
+- Base de conhecimento: **um** acervo Markdown, vínculos N:N (fora do MVP)
 - Visualizações: Kanban, calendário, timeline, tabela (mesmos dados)
 - Backend = única fonte de verdade das regras
 - Documentação sincronizada com o comportamento atual

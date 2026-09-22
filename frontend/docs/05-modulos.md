@@ -20,7 +20,7 @@ Planejamento e acompanhamento de ciclos de desenvolvimento e suas respectivas ta
 
 ## Tickets
 
-Módulo principal de atendimento ao cliente: abertura, acompanhamento e organização dos chamados. Tickets utilizam as mesmas visualizações das tarefas (Kanban, calendário, tabela e cronograma) e não são tarefas com categoria de suporte.
+Módulo principal de atendimento ao cliente: abertura, acompanhamento e organização dos chamados. Tickets utilizam as mesmas visualizações das tarefas (Kanban, calendário, tabela e cronograma) e não são tarefas com categoria de suporte. No MVP, apenas a visualização Kanban é entregue.
 
 ## Clientes
 
@@ -32,7 +32,7 @@ Gerenciamento dos usuários, seus perfis, cargos, status e participação nos pr
 
 ## Base de Conhecimento
 
-Gerenciamento do **único acervo** de documentos Markdown do sistema. Os documentos podem ser vinculados a projetos, tarefas e tickets (N:N). Não existe módulo separado de “Documentação”.
+Gerenciamento do **único acervo** de documentos Markdown do sistema. Os documentos podem ser vinculados a projetos, tarefas e tickets (N:N). Não existe módulo separado de “Documentação”. Fora do MVP.
 
 ## Versões
 

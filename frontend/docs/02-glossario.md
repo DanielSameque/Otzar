@@ -5,7 +5,7 @@
 | ------------------------ | ----------------------------------------------------------------------------------------------- |
 | **Otzar**                | Sistema de gestão de tarefas, projetos, tickets e conhecimento, para uma única organização.     |
 | **Tarefa**               | Unidade central de trabalho de desenvolvimento. Pode existir com ou sem projeto.                |
-| **Ticket**               | Unidade central de atendimento ao cliente. Entidade distinta de Tarefa.                         |
+| **Ticket**               | Unidade central de atendimento ao cliente. Entidade distinta de Tarefa. Faz parte do MVP.      |
 | **Projeto**              | Agrupamento de informações relacionadas a um produto, sistema ou contrato.                      |
 | **Backlog**              | Visualização **global e única** das tarefas sem Sprint. Não é uma entidade persistida.         |
 | **Sprint**               | Ciclo de desenvolvimento que pode conter tarefas de diferentes projetos. Sem versão própria.    |
@@ -16,8 +16,8 @@
 | **Usuário**              | Pessoa que utiliza o Otzar.                                                                     |
 | **Categoria**            | Classificação do tipo de trabalho. Não substitui o módulo de Tickets. Fora do MVP.              |
 | **Tag**                  | Classificação personalizada de tarefas, tickets e documentos. Fora do MVP.                      |
-| **Base de Conhecimento** | Único acervo de documentos Markdown do sistema, com vínculos N:N.                               |
-| **Documento**            | Arquivo Markdown do acervo. Pode ligar-se a vários projetos, tarefas e tickets.                 |
+| **Base de Conhecimento** | Único acervo de documentos Markdown do sistema, com vínculos N:N. Fora do MVP.                  |
+| **Documento**            | Arquivo Markdown do acervo. Pode ligar-se a vários projetos, tarefas e tickets. Fora do MVP.  |
 | **Versão**               | Entidade de release de um projeto. Tarefas do mesmo projeto podem associar-se a uma versão.     |
 | **Responsável**          | Usuário designado para executar ou acompanhar uma tarefa ou um ticket.                          |
 | **Status**               | Estado atual de uma tarefa, ticket ou outro recurso do sistema.                                 |

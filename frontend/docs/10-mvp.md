@@ -2,9 +2,9 @@
 
 ## Objetivo
 
-O MVP (Minimum Viable Product) do Otzar tem como objetivo validar a arquitetura, a experiência do usuário e o fluxo principal de gerenciamento de tarefas e projetos antes da implementação dos módulos mais avançados.
+O MVP (Minimum Viable Product) do Otzar tem como objetivo validar a arquitetura, a experiência do usuário e o fluxo principal de gerenciamento de tarefas, projetos e tickets de suporte antes da implementação dos módulos mais avançados.
 
-O foco do MVP não é possuir todas as funcionalidades planejadas, mas entregar uma solução simples, estável e utilizável, capaz de demonstrar o principal diferencial do produto: integrar gestão de tarefas, projetos, documentação em Markdown e, futuramente, Inteligência Artificial.
+O foco do MVP não é possuir todas as funcionalidades planejadas, mas entregar uma solução simples, estável e utilizável, capaz de demonstrar o principal diferencial do produto: integrar gestão de tarefas, projetos, tickets de suporte e, futuramente, documentação em Markdown e Inteligência Artificial.
 
 ---
 
@@ -79,32 +79,37 @@ No MVP, como Sprints ainda não fazem parte do sistema, todas as tarefas aparece
 
 ## 5. Visualização Kanban
 
-O Kanban **não é um módulo**: é uma visualização das tarefas organizadas por status, acessada dentro do módulo de Tarefas.
+O Kanban **não é um módulo**: é uma visualização organizada por status, acessada dentro dos módulos de Tarefas e de Tickets.
 
 É a única visualização entregue no MVP. Calendário, Tabela e Cronograma ficam para o Roadmap.
 
-A mudança entre Backlog, Kanban e outras visualizações futuras não altera os dados da tarefa.
+A mudança entre Backlog, Kanban e outras visualizações futuras não altera os dados da tarefa ou do ticket.
 
 ### Funcionalidades
 
 * Visualizar tarefas por status
 * Alterar status da tarefa no quadro
+* Visualizar tickets por status
+* Alterar status do ticket no quadro
 * Filtrar e ordenar o quadro
 
 ---
 
-## 6. Base de Conhecimento
+## 6. Tickets (Suporte)
 
-A Base de Conhecimento é o **único acervo Markdown** do sistema. Documentos não pertencem exclusivamente a um projeto.
+O Ticket é a entidade central do atendimento no Otzar. Tickets são distintos de Tarefas.
+
+Associação com cliente, categoria e tags **não faz parte do MVP**. Esses campos entram junto com os módulos Clientes e Categorias e Tags.
 
 ### Funcionalidades
 
-* Criar documentos Markdown
-* Editar documentos
-* Importar arquivos `.md`
-* Visualizar documentação
-* Relacionar documentos com tarefas (N:N)
-* Relacionar documentos com projetos (N:N)
+* Criar ticket
+* Editar ticket
+* Excluir ticket
+* Priorizar ticket
+* Alterar status
+* Definir responsável
+* Visualizar e gerenciar tickets no Kanban
 
 ---
 
@@ -123,14 +128,14 @@ Tarefas
 
 ↓
 
-Backlog / Kanban
+Backlog / Kanban (tarefas)
 
 ↓
 
-Base de Conhecimento (acervo Markdown único)
+Tickets (suporte, com Kanban)
 ```
 
-Tarefas também podem existir independentemente de um projeto. O Backlog é único e global.
+Tarefas e tickets também podem existir independentemente de um projeto. O Backlog é único e global.
 
 ---
 
@@ -145,7 +150,7 @@ As funcionalidades abaixo fazem parte do Roadmap, porém não serão implementad
 * Comentários
 * Anexos
 * Visualizações Calendário, Tabela e Cronograma
-* Gestão de Tickets
+* Base de Conhecimento (acervo Markdown único)
 * Dashboard completo
 * Time Tracking
 * IA
@@ -163,6 +168,7 @@ O MVP será considerado validado quando for possível:
 * Criar e gerenciar tarefas sem exigir cliente, categoria ou tags;
 * Visualizar e organizar tarefas no Backlog global;
 * Visualizar e mover tarefas no Kanban;
-* Relacionar documentos Markdown do acervo único às tarefas;
+* Criar e gerenciar tickets de suporte sem exigir cliente, categoria ou tags;
+* Visualizar e mover tickets no Kanban;
 * Navegar pelo sistema de forma simples e intuitiva;
 * Funcionar em diferentes tamanhos de tela/dispositivos.

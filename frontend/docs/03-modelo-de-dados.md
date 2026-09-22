@@ -67,7 +67,7 @@ Uma **Tarefa pode existir sem projeto**.
 
 O Backlog é **único e global**.
 
-A Base de Conhecimento é **um único acervo Markdown** do sistema, com vínculos N:N.
+A Base de Conhecimento é **um único acervo Markdown** do sistema, com vínculos N:N. Fora do MVP.
 
 ---
 
@@ -90,6 +90,8 @@ Ao remover a Sprint, ela retorna automaticamente ao Backlog.
 ---
 
 # Conceito de Base de Conhecimento
+
+O módulo fica fora do MVP (ver `10-mvp.md`).
 
 A Base de Conhecimento **não é uma entidade duplicada por projeto**.
 
@@ -284,7 +286,7 @@ Quando `VersaoId` estiver preenchido, a versão deve pertencer ao mesmo projeto 
 
 Representa um chamado de suporte ou atendimento ao cliente.
 
-É entidade própria, distinta de Tarefa. Não deve ser modelado apenas como tarefa com categoria “Suporte”.
+É entidade própria, distinta de Tarefa. Não deve ser modelado apenas como tarefa com categoria “Suporte”. Faz parte do MVP; cliente, categoria, tags e vínculos com documentos ficam fora desta fase.
 
 ### Atributos
 
@@ -325,7 +327,7 @@ Representa um chamado de suporte ou atendimento ao cliente.
 
 ## Documento
 
-Representa um arquivo Markdown do acervo único da Base de Conhecimento.
+Representa um arquivo Markdown do acervo único da Base de Conhecimento. Fora do MVP.
 
 ### Atributos
 

@@ -155,5 +155,6 @@ Não fazem parte desta etapa e serão implementados junto com os módulos de dom
 
 * Autenticação, JWT e guards de autorização;
 * Entidades do domínio no schema do Prisma;
-* Endpoints de Projetos, Tarefas, Tickets, Documentos e demais recursos;
+* Endpoints de Projetos, Tarefas, Tickets e demais recursos do MVP ([`10-mvp.md`](../../../frontend/docs/10-mvp.md));
+* Endpoints de Documentos (Base de Conhecimento) e demais recursos pós-MVP;
 * Deploy no Render com `DATABASE_URL` apontando para o Neon.

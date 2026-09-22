@@ -29,7 +29,9 @@ O frontend pode reproduzir uma restrição na interface para dar retorno imediat
 * Ticket é entidade distinta de Tarefa.
 * Um ticket pode existir com ou sem projeto e com ou sem cliente.
 * O código do ticket é gerado automaticamente e é único em todo o sistema.
-* Um ticket pode estar relacionado a várias tarefas e a vários documentos.
+* O vínculo de ticket com cliente não é obrigatório e fica fora do MVP, junto com o módulo Clientes.
+* Categoria e tags de ticket existem no domínio, mas a associação fica fora do MVP, junto com os módulos correspondentes.
+* Um ticket pode estar relacionado a várias tarefas e a vários documentos. Vínculos com documentos ficam fora do MVP, junto com a Base de Conhecimento.
 
 ## Sprints
 
@@ -52,7 +54,7 @@ O frontend pode reproduzir uma restrição na interface para dar retorno imediat
 
 ## Documentação
 
-* Existe um único acervo Markdown (Base de Conhecimento).
+* Existe um único acervo Markdown (Base de Conhecimento). O módulo fica fora do MVP.
 * Um documento pode existir sem vínculos.
 * Vínculos com projetos, tarefas e tickets são N:N.
 * Relacionar um documento não duplica o conteúdo.

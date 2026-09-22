@@ -25,6 +25,8 @@ A navegação principal deve organizar o sistema por contexto:
 
 O Backlog não é por projeto. Filtro por projeto, quando existir, ocorre dentro do mesmo Backlog.
 
+No MVP, a navegação principal inclui Projetos, Tarefas, Backlog e Tickets. Base de Conhecimento, Sprints e Clientes entram após o MVP.
+
 O Kanban não é um item de navegação. Ele é uma visualização, acessada dentro de Tarefas e de Tickets.
 
 ## Visualizações

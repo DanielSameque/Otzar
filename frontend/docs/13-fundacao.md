@@ -71,7 +71,7 @@ O layout se adapta à largura da janela:
 | `>= 840`  | `NavigationRail` recolhido                     |
 | `>= 1200` | `NavigationRail` estendido, com rótulos        |
 
-Os itens da navegação principal seguem `06-ui-ux.md`: Projetos, Tarefas, Backlog e Base de Conhecimento. As telas dessas rotas ainda são provisórias (`SectionPlaceholderView`).
+Os itens da navegação principal do MVP seguem `06-ui-ux.md` e `10-mvp.md`: Projetos, Tarefas, Backlog e Tickets. As telas dessas rotas ainda são provisórias (`SectionPlaceholderView`).
 
 O redirecionamento para o login será configurado em `appRouterProvider` quando a Feature de Autenticação existir.
 
@@ -152,6 +152,6 @@ Não fazem parte desta etapa e serão implementados junto com as Features:
 
 * Autenticação, JWT e rotas protegidas;
 * Entidades do domínio no schema do Prisma;
-* Telas reais de Projetos, Tarefas, Backlog e Base de Conhecimento;
+* Telas reais de Projetos, Tarefas, Backlog e Tickets;
 * Visualização Kanban;
 * Deploy no Render.
