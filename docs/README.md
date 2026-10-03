@@ -22,6 +22,7 @@ Otzar/
 | Documento | Assunto |
 | --------- | ------- |
 | [Plano de estudo](plano-de-estudo.md) | Roteiro de aprendizado: Cursor, IA, produto e stack |
+| [Checklist de progresso](checklist-progresso-estudo.md) | Checklist marcável: lógica → Dart → Flutter → Otzar (4 semanas) |
 
 ---
 

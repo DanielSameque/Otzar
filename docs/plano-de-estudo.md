@@ -4,6 +4,8 @@ Guia de aprendizado para contribuir no monorepo: Cursor, IA, produto e stack.
 
 Ordem sugerida: **Cursor → IA → Otzar → Stack**. Assim você aprende a ferramenta, o modo de trabalhar com IA, o produto e só depois o código.
 
+Para quem está começando do zero (lógica → Dart → Flutter → projeto) e quer marcar o progresso semana a semana, use o [checklist de progresso](checklist-progresso-estudo.md).
+
 ---
 
 # Fase 0 — Mapa mental (1 dia)
