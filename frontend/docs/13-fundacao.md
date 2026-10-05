@@ -25,6 +25,7 @@ flowchart TB
     Main["main.dart<br/>ProviderScope"] --> App["app/app.dart<br/>MaterialApp.router"]
     App --> Theme["app/theme<br/>AppTheme + ThemeModeNotifier"]
     App --> Router["app/router<br/>appRouterProvider"]
+    Router --> Auth["features/auth<br/>jornada de login"]
     Router --> Shell["features/shell<br/>AppShellView"]
     Shell --> Feature["Views das Features"]
     Feature --> ViewModel["ViewModel"]
@@ -48,6 +49,7 @@ flowchart TB
 | `lib/core/network/api_client.dart`              | Transporte HTTP e tradução de erros.                                   |
 | `lib/core/errors/app_exception.dart`            | Falhas conhecidas da aplicação.                                        |
 | `lib/core/widgets/`                             | Estados de carregando, vazio e erro.                                   |
+| `lib/features/auth/`                            | Jornada de entrada (splash, login stub e sessão em memória).           |
 | `lib/features/shell/`                           | Barra superior e navegação principal.                                  |
 | `lib/features/health/`                          | Verificação de conexão com a API.                                      |
 
@@ -58,6 +60,8 @@ O esquema de cores claro e escuro está definido em `AppColors`, exportado do Ma
 Para trocar a identidade visual, substitua `AppColors.lightScheme()` e `AppColors.darkScheme()` por uma nova paleta exportada do Material Theme Builder. As Features nunca escrevem cores diretamente: obtêm tudo de `Theme.of(context)`.
 
 A preferência entre tema claro e escuro é alternada pela barra superior e persistida localmente.
+
+Campos de texto usam só a linha inferior, sem preenchimento e sem caixa. Em foco, a linha assume a cor primária; em erro, a cor de erro.
 
 ## Navegação
 
@@ -73,7 +77,9 @@ O layout se adapta à largura da janela:
 
 Os itens da navegação principal do MVP seguem `06-ui-ux.md` e `10-mvp.md`: Projetos, Tarefas, Backlog e Tickets. As telas dessas rotas ainda são provisórias (`SectionPlaceholderView`).
 
-O redirecionamento para o login será configurado em `appRouterProvider` quando a Feature de Autenticação existir.
+A aplicação abre em `/login`. Sem sessão, qualquer rota do shell volta para `/login`. Com sessão, `/login` vai para `/projetos`. A sessão é só em memória (não há JWT). O comportamento da jornada está em [Login/autenticacao.md](Login/autenticacao.md).
+
+O corte de layout da autenticação é **900px** (`AppBreakpoints.medium`). O shell continua nos limiares **840** e **1200** descritos acima.
 
 ## Comunicação com a API
 
@@ -150,7 +156,7 @@ O backend continua sendo a única fonte de verdade das regras de negócio, confo
 
 Não fazem parte desta etapa e serão implementados junto com as Features:
 
-* Autenticação, JWT e rotas protegidas;
+* Autenticação real na API (JWT). A jornada visual e o redirect usam sessão em memória;
 * Entidades do domínio no schema do Prisma;
 * Telas reais de Projetos, Tarefas, Backlog e Tickets;
 * Visualização Kanban;

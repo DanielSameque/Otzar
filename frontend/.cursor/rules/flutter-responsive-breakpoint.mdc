@@ -1,0 +1,29 @@
+---
+description: "Breakpoint responsivo global do Otzar: 900px (desktop split vs mobile stack)"
+globs: **/*.{dart,md}
+alwaysApply: true
+---
+
+# Breakpoint responsivo — Otzar
+
+## Regra
+
+O breakpoint responsivo global do frontend Otzar é **900px**.
+
+| Largura | Layout |
+| ---- | ---- |
+| `width >= 900` | Desktop / Web largo (ex.: split view, sidebar persistente quando aplicável) |
+| `width < 900` | Mobile / compacto (ex.: stack vertical, navegação adaptada) |
+
+## Obrigações ao implementar UI
+
+- Usar **900** como único limiar padrão para trocar layout (não inventar 768, 600, 1024 etc. sem necessidade documentada).
+- Preferir uma constante central (ex.: `AppBreakpoints.medium = 900` ou nome equivalente já usado no projeto) em vez de literais espalhados.
+- Avaliar com `LayoutBuilder`, `MediaQuery.sizeOf(context).width` ou utilitário do design system — sempre com o mesmo limiar.
+- Telas de autenticação, shell e features novas devem respeitar este breakpoint por padrão.
+- Se uma tela precisar de um limiar diferente, documentar a exceção na documentação da feature e justificar o motivo.
+
+## Exemplos de aplicação
+
+- Auth: ≥900 split (animação | formulário); <900 stack (animação acima, formulário abaixo).
+- Shell / listas / formulários: adaptar densidade e navegação no mesmo corte de 900px.
