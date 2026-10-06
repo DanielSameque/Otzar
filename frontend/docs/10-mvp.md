@@ -18,14 +18,88 @@ Responsável pelo acesso ao sistema.
 
 ### Funcionalidades
 
-* Login
-* Logout
-* Recuperação de senha
-* Perfil do usuário
+- Login
+- Logout
+- Recuperação de senha
+- Perfil do usuário
 
 ---
 
-## 2. Gestão de Projetos
+
+
+## 2. Layout base (Shell)
+
+Estrutura visual comum da aplicação após o login: sidebar de navegação, top bar e área de conteúdo.
+
+No MVP, o shell deve exibir a hierarquia completa de menus. Itens cujo módulo ainda não faz parte do MVP podem aparecer desabilitados ou como placeholder, sem implementar a tela correspondente.
+
+### Componentes
+
+- Sidebar (navegação principal)
+- Top bar
+- Área de conteúdo (rota ativa)
+
+### Estrutura da sidebar
+
+```text
+Logo Empresa
+
+Dev
+  Projeto
+  Versões
+  Backlog
+  Sprints
+  Quadro
+  Relatórios
+
+Base de Conhecimento
+
+Clientes
+
+Time
+
+Implantação
+
+Suporte
+  Quadro
+  Área do Cliente
+  Relatórios
+
+Sair
+```
+
+| Grupo / item | Observação no MVP |
+| ---- | ---- |
+| Logo Empresa | Identidade visual no topo da sidebar |
+| Dev → Projeto | Ativo (Gestão de Projetos) |
+| Dev → Versões | Fora do MVP (placeholder) |
+| Dev → Backlog | Ativo |
+| Dev → Sprints | Fora do MVP (placeholder) |
+| Dev → Quadro | Ativo (Kanban de tarefas) |
+| Dev → Relatórios | Fora do MVP (placeholder) |
+| Base de Conhecimento | Fora do MVP (placeholder) |
+| Clientes | Fora do MVP (placeholder) |
+| Time | Fora do MVP (placeholder) |
+| Implantação | Fora do MVP (placeholder) |
+| Suporte → Quadro | Ativo (Kanban de tickets) |
+| Suporte → Área do Cliente | Fora do MVP (placeholder) |
+| Suporte → Relatórios | Fora do MVP (placeholder) |
+| Sair | Ativo (logout) |
+
+### Funcionalidades
+
+- Exibir sidebar com a hierarquia de menus acima
+- Destacar o item de menu correspondente à rota atual
+- Top bar com contexto da tela (título e ações básicas)
+- Área de conteúdo responsiva
+- Navegação para os itens ativos do MVP
+- Logout via item Sair
+
+---
+
+
+
+## 3. Gestão de Projetos
 
 Os projetos organizam as informações do sistema, mas algumas entidades, como tarefas, podem existir independentemente de um projeto.
 
@@ -33,35 +107,39 @@ No MVP, o projeto **não** exige cliente. Associação com clientes fica para o 
 
 ### Funcionalidades
 
-* Criar projeto
-* Editar projeto
-* Arquivar projeto
-* Definir membros
-* Definir responsáveis
+- Criar projeto
+- Editar projeto
+- Arquivar projeto
+- Definir membros
+- Definir responsáveis
 
 ---
 
-## 3. Tarefas
+
+
+## 4. Tarefas
 
 A tarefa é a entidade central do Otzar no desenvolvimento.
 
 As tarefas podem existir com ou sem projeto e podem ser organizadas posteriormente em Sprints.
 
-Associação com cliente, categoria e tags **não faz parte do MVP**. Esses campos entram junto com os módulos Clientes e Categorias e Tags.
+Associação com cliente, categoria e tags **não faz parte do MVP**. Esses campos entram junto com os módulos Clientes e Categorias, Tags e Humor.
 
 ### Funcionalidades
 
-* Criar tarefa
-* Editar tarefa
-* Excluir tarefa
-* Priorizar tarefa
-* Alterar status
-* Definir responsável
-* Criar subtarefas
+- Criar tarefa
+- Editar tarefa
+- Excluir tarefa
+- Priorizar tarefa
+- Alterar status
+- Definir responsável
+- Criar subtarefas
 
 ---
 
-## 4. Backlog
+
+
+## 5. Backlog
 
 O Backlog é a visualização **global e única** das tarefas que não possuem uma Sprint associada.
 
@@ -69,15 +147,17 @@ No MVP, como Sprints ainda não fazem parte do sistema, todas as tarefas aparece
 
 ### Funcionalidades
 
-* Visualizar tarefas
-* Filtrar tarefas
-* Ordenar tarefas
-* Priorizar tarefas
-* Acessar e editar tarefas
+- Visualizar tarefas
+- Filtrar tarefas
+- Ordenar tarefas
+- Priorizar tarefas
+- Acessar e editar tarefas
 
 ---
 
-## 5. Visualização Kanban
+
+
+## 6. Visualização Kanban
 
 O Kanban **não é um módulo**: é uma visualização organizada por status, acessada dentro dos módulos de Tarefas e de Tickets.
 
@@ -87,15 +167,17 @@ A mudança entre Backlog, Kanban e outras visualizações futuras não altera os
 
 ### Funcionalidades
 
-* Visualizar tarefas por status
-* Alterar status da tarefa no quadro
-* Visualizar tickets por status
-* Alterar status do ticket no quadro
-* Filtrar e ordenar o quadro
+- Visualizar tarefas por status
+- Alterar status da tarefa no quadro
+- Visualizar tickets por status
+- Alterar status do ticket no quadro
+- Filtrar e ordenar o quadro
 
 ---
 
-## 6. Tickets (Suporte)
+
+
+## 7. Tickets (Suporte)
 
 O Ticket é a entidade central do atendimento no Otzar. Tickets são distintos de Tarefas.
 
@@ -103,20 +185,26 @@ Associação com cliente, categoria e tags **não faz parte do MVP**. Esses camp
 
 ### Funcionalidades
 
-* Criar ticket
-* Editar ticket
-* Excluir ticket
-* Priorizar ticket
-* Alterar status
-* Definir responsável
-* Visualizar e gerenciar tickets no Kanban
+- Criar ticket
+- Editar ticket
+- Excluir ticket
+- Priorizar ticket
+- Alterar status
+- Definir responsável
+- Visualizar e gerenciar tickets no Kanban
 
 ---
+
+
 
 # Fluxo do MVP
 
 ```text
 Login
+
+↓
+
+Layout base (sidebar + top bar)
 
 ↓
 
@@ -139,36 +227,42 @@ Tarefas e tickets também podem existir independentemente de um projeto. O Backl
 
 ---
 
+
+
 # Funcionalidades fora do MVP
 
 As funcionalidades abaixo fazem parte do Roadmap, porém não serão implementadas inicialmente.
 
-* Sprints
-* Versões de projeto
-* Clientes (incluindo vínculo de cliente a projeto, tarefa ou ticket)
-* Categorias e Tags
-* Comentários
-* Anexos
-* Visualizações Calendário, Tabela e Cronograma
-* Base de Conhecimento (acervo Markdown único)
-* Dashboard completo
-* Time Tracking
-* IA
-* Integração com WhatsApp
-* Automações
-* Relatórios avançados
+- Sprints
+- Versões de projeto
+- Clientes (incluindo vínculo de cliente a projeto, tarefa ou ticket)
+- Categorias e Tags
+- Comentários
+- Anexos
+- Visualizações Calendário, Tabela e Cronograma
+- Base de Conhecimento (acervo Markdown único)
+- Dashboard completo
+- Time Tracking
+- IA
+- Integração com WhatsApp
+- Automações
+- Relatórios avançados
 
 ---
+
+
 
 # Critérios de sucesso
 
 O MVP será considerado validado quando for possível:
 
-* Criar e gerenciar um projeto sem exigir cliente;
-* Criar e gerenciar tarefas sem exigir cliente, categoria ou tags;
-* Visualizar e organizar tarefas no Backlog global;
-* Visualizar e mover tarefas no Kanban;
-* Criar e gerenciar tickets de suporte sem exigir cliente, categoria ou tags;
-* Visualizar e mover tickets no Kanban;
-* Navegar pelo sistema de forma simples e intuitiva;
-* Funcionar em diferentes tamanhos de tela/dispositivos.
+- Autenticar e sair do sistema;
+- Navegar pelo layout base (sidebar e top bar) com os itens ativos do MVP;
+- Criar e gerenciar um projeto sem exigir cliente;
+- Criar e gerenciar tarefas sem exigir cliente, categoria ou tags;
+- Visualizar e organizar tarefas no Backlog global;
+- Visualizar e mover tarefas no Kanban;
+- Criar e gerenciar tickets de suporte sem exigir cliente, categoria ou tags;
+- Visualizar e mover tickets no Kanban;
+- Navegar pelo sistema de forma simples e intuitiva;
+- Funcionar em diferentes tamanhos de tela/dispositivos.

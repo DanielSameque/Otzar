@@ -40,9 +40,19 @@ abstract final class AppTheme {
           side: BorderSide(color: colorScheme.outlineVariant),
         ),
       ),
-      inputDecorationTheme: const InputDecorationThemeData(
-        border: OutlineInputBorder(),
+      inputDecorationTheme: InputDecorationThemeData(
         filled: true,
+        fillColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        activeIndicatorBorder: WidgetStateBorderSide.resolveWith((states) {
+          if (states.contains(WidgetState.error)) {
+            return BorderSide(color: colorScheme.error);
+          }
+          if (states.contains(WidgetState.focused)) {
+            return BorderSide(color: colorScheme.primary);
+          }
+          return BorderSide(color: colorScheme.outlineVariant);
+        }),
       ),
     );
   }
