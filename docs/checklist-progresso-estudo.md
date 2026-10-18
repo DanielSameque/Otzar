@@ -220,7 +220,7 @@ Trate cada tela assim: **entender → localizar no Otzar (se existir) → criar 
 ### Arquitetura (primeiro contato, sem se perder)
 
 - [ ] Li a [fundação do frontend](../frontend/docs/13-fundacao.md) (leitura guiada)
-- [ ] Ouvi falar de MVVM no Otzar (View → ViewModel → …)
+- [ ] Ouvi falar de MVC no Otzar (View → Controller → Service → Repository)
 - [ ] Sei que o frontend **não** acessa o banco direto
 
 

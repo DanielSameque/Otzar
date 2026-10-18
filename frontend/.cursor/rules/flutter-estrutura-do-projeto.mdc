@@ -6,260 +6,166 @@ alwaysApply: false
 
 # Estrutura do Projeto — Otzar
 
-O projeto deve ser organizado principalmente por **Features**, mantendo dentro de cada Feature suas próprias camadas de dados, negócio e apresentação.
+O projeto é organizado **por camada**, com a mesma estrutura de pastas do QuickTrade Web (`WEB/quicktradeweb`). Dentro de cada camada, os arquivos ficam agrupados por módulo.
 
 ## Estrutura padrão
 
 ```text
 lib/
-├── app/
-├── core/
-├── features/
-└── main.dart
+├── main.dart
+├── Model/
+│   └── <modulo>_model/
+├── Repository/
+│   └── <modulo>_repository/
+├── Service/
+│   ├── routes.dart
+│   ├── http_service.dart
+│   ├── http_exceptions.dart
+│   ├── app_config.dart
+│   └── <modulo>_service/
+├── Controller/
+│   ├── theme_controller.dart
+│   └── <modulo>_controller/
+├── View/
+│   ├── start_widget.dart
+│   ├── home_page.dart
+│   ├── <modulo>_page.dart
+│   ├── Componentes/
+│   └── <modulo>_view/
+│       ├── <modulo>_page.dart
+│       └── <modulo>_componentes/
+└── src/
+    └── theme/
+```
+
+Exemplo com o módulo de tarefas:
+
+```text
+lib/
+├── Model/tasks_model/task_model.dart
+├── Repository/tasks_repository/task_repository.dart
+├── Service/tasks_service/task_service.dart
+├── Controller/tasks_controller/task_controller.dart
+└── View/tasks_view/
+    ├── tasks_page.dart
+    └── tasks_componentes/
+        ├── task_card.dart
+        └── task_status_badge.dart
 ```
 
 ---
 
-# 1. Features
+# 1. Convenção de nomes
 
-Toda funcionalidade do sistema deve ficar dentro de `features/`.
+| Camada | Pasta | Arquivo | Classe |
+| ------ | ----- | ------- | ------ |
+| Model | `Model/<modulo>_model/` | `*_model.dart` | `<Nome>Model` |
+| Repository | `Repository/<modulo>_repository/` | `*_repository.dart` | `I<Nome>Repository` + `Http<Nome>Repository` |
+| Service | `Service/<modulo>_service/` | `*_service.dart` | `<Nome>Service` |
+| Controller | `Controller/<modulo>_controller/` | `*_controller.dart` | `<Nome>Controller` |
+| View (tela) | `View/` ou `View/<modulo>_view/` | `*_page.dart` | `<Nome>Page` |
+| View (componente) | `View/Componentes/` ou `View/<modulo>_view/<modulo>_componentes/` | nome do widget | nome do widget |
 
-Exemplos:
-
-```text
-features/
-├── auth/
-├── tasks/
-├── tickets/
-├── clients/
-├── projects/
-├── sprints/
-└── dashboard/
-```
-
-Uma Feature deve conter apenas código relacionado à sua própria responsabilidade.
-
-Estrutura padrão:
-
-```text
-feature/
-├── data/
-│   ├── models/
-│   └── repositories/
-│
-├── domain/
-│   └── services/
-│
-└── presentation/
-    ├── view_models/
-    ├── views/
-    └── widgets/
-```
+* Pastas das camadas em PascalCase (`Model`, `View`...), como no WEB.
+* Subpastas e arquivos em `snake_case`.
+* Imports sempre por pacote: `package:otzar/...`.
+* Providers ficam no mesmo arquivo da classe que fornecem (`healthControllerProvider` em `health_controller.dart`).
 
 ---
 
-# 2. Presentation
+# 2. Model
 
-Contém tudo relacionado à apresentação da Feature.
+Contém os Models de cada módulo.
 
-```text
-presentation/
-├── view_models/
-├── views/
-└── widgets/
-```
-
-### views
-
-Contém as telas da Feature.
-
-Exemplo:
-
-```text
-tasks_view.dart
-task_details_view.dart
-```
-
-### view_models
-
-Contém os ViewModels e Providers responsáveis pelo estado e comportamento da tela.
-
-Utilizar Riverpod.
-
-Exemplo:
-
-```text
-task_view_model.dart
-```
-
-### widgets
-
-Contém componentes visuais específicos da Feature.
-
-Exemplo:
-
-```text
-task_card.dart
-task_filter.dart
-task_status_badge.dart
-```
-
-Widgets reutilizáveis entre várias Features devem ir para `core/widgets`.
+Arquivos gerados pelo Freezed/json_serializable (`*.freezed.dart`, `*.g.dart`) permanecem junto ao Model.
 
 ---
 
-# 3. Data
+# 3. Repository
 
-Contém acesso e representação dos dados da Feature.
-
-```text
-data/
-├── models/
-└── repositories/
-```
-
-### models
-
-Contém os Models da Feature.
-
-Utilizar Freezed quando apropriado.
-
-Exemplo:
-
-```text
-task.dart
-```
-
-Arquivos gerados pelo Freezed/json_serializable devem permanecer junto ao Model.
-
-### repositories
-
-Contém os Repositories responsáveis pelo acesso aos dados.
-
-Exemplo:
-
-```text
-task_repository.dart
-```
+Contém a interface e as implementações de acesso a dados de cada módulo.
 
 O Repository não deve conter regras de negócio.
 
 ---
 
-# 4. Domain
+# 4. Service
 
-Contém a orquestração das operações da Feature no frontend.
+Contém os Services de cada módulo, em `Service/<modulo>_service/`.
 
-```text
-domain/
-└── services/
-```
+Na raiz de `Service/` ficam os serviços de infraestrutura compartilhados:
 
-### services
+| Arquivo | Responsabilidade |
+| ------- | ---------------- |
+| `routes.dart` | `AppRoutes` (caminhos) e `appRouterProvider` (GoRouter) |
+| `http_service.dart` | `ApiClient`: transporte HTTP e tradução de erros |
+| `http_exceptions.dart` | `AppException` e derivadas |
+| `app_config.dart` | Configuração do ambiente (`--dart-define`) |
 
-Contém os Services que coordenam Repositories e preparam o resultado para a camada de apresentação.
-
-Exemplo:
-
-```text
-task_service.dart
-```
-
-Services podem utilizar Repositories para executar operações.
-
-As regras de negócio do Otzar são definidas e validadas no backend. Esta camada não redefine regras: ela apenas orquestra chamadas e trata os erros devolvidos pela API.
+As regras de negócio do Otzar são definidas e validadas no backend. Os Services não redefinem regras: apenas orquestram chamadas e tratam os erros devolvidos pela API.
 
 Ver `docs/07-arquitetura.md` e `docs/04-regras-de-negocio.md`.
 
 ---
 
-# 5. Core
+# 5. Controller
 
-`core/` contém somente recursos realmente compartilhados por várias Features e que não pertencem a uma funcionalidade específica.
+Contém os Controllers (Riverpod) de cada módulo, em `Controller/<modulo>_controller/`.
 
-Estrutura sugerida:
-
-```text
-core/
-├── constants/
-├── errors/
-├── network/
-├── storage/
-├── utils/
-└── widgets/
-```
-
-### network
-
-Infraestrutura HTTP compartilhada.
-
-Exemplo:
-
-```text
-api_client.dart
-```
-
-### storage
-
-Acesso ao armazenamento local compartilhado.
-
-Exemplo:
-
-```text
-local_storage.dart
-```
-
-### errors
-
-Exceções e erros compartilhados.
-
-### constants
-
-Constantes globais da aplicação.
-
-### utils
-
-Funções utilitárias realmente compartilhadas.
-
-### widgets
-
-Widgets reutilizáveis por várias Features.
-
-Não utilizar `core` como depósito de arquivos sem uma responsabilidade definida.
+Controllers globais, como o de tema, ficam na raiz de `Controller/`.
 
 ---
 
-# 6. App
+# 6. View
 
-`app/` contém configurações globais da aplicação.
+Contém as telas e os widgets.
 
-Exemplo:
+* `start_widget.dart`: `MaterialApp.router`, temas e roteador.
+* `home_page.dart`: shell com barra superior e navegação principal.
+* Tela simples, sem componentes próprios: `View/<modulo>_page.dart`.
+* Tela com componentes próprios: `View/<modulo>_view/<modulo>_page.dart` e os componentes em `View/<modulo>_view/<modulo>_componentes/`.
+* Widgets reutilizados por vários módulos: `View/Componentes/`.
+
+---
+
+# 7. src
+
+Recursos visuais globais.
 
 ```text
-app/
-├── app.dart
-├── router/
+src/
 └── theme/
+    ├── app_colors.dart
+    ├── app_theme.dart
+    ├── app_text_theme.dart
+    └── app_breakpoints.dart
 ```
 
-### router
-
-Configuração do GoRouter e rotas globais.
-
-### theme
-
-Configuração do Material Design 3, temas, cores e tipografia.
+Imagens e outros assets, quando existirem, ficam em `src/assets/`.
 
 ---
 
-# 7. Fluxo de dependências
+# 8. Testes
 
-As dependências devem seguir:
+A pasta `test/` espelha a camada do arquivo testado:
+
+```text
+test/
+├── Repository/<modulo>_repository/
+├── Service/<modulo>_service/
+├── Controller/<modulo>_controller/
+├── View/<modulo>_view/
+└── widget_test.dart
+```
+
+---
+
+# 9. Fluxo de dependências
 
 ```text
 View
  ↓
-ViewModel
+Controller
  ↓
 Service
  ↓
@@ -270,66 +176,42 @@ ApiClient
 
 A View não deve acessar diretamente:
 
+* Service.
 * Repository.
 * ApiClient.
-* Banco de dados.
 * Serviços de infraestrutura.
 
 ---
 
-# 8. Regra de localização
+# 10. Regra de localização
 
-Antes de criar um arquivo, determine a quem ele pertence.
-
-Se pertence a uma Feature:
+Antes de criar um arquivo, determine a **camada** e depois o **módulo**.
 
 ```text
-features/<feature>/
+✅ Model/tasks_model/task_model.dart
+✅ Repository/tasks_repository/task_repository.dart
+✅ Service/tasks_service/task_service.dart
+✅ Controller/tasks_controller/task_controller.dart
+✅ View/tasks_view/tasks_page.dart
 ```
 
-Se é compartilhado entre Features:
+Não criar:
 
 ```text
-core/
-```
-
-Se é configuração global da aplicação:
-
-```text
-app/
-```
-
-Não criar pastas globais como:
-
-```text
-❌ lib/models/
-❌ lib/services/
-❌ lib/repositories/
-❌ lib/providers/
-❌ lib/views/
-```
-
-quando os arquivos pertencem a Features específicas.
-
-Preferir:
-
-```text
-✅ features/tasks/data/models/
-✅ features/tasks/domain/services/
-✅ features/tasks/data/repositories/
-✅ features/tasks/presentation/view_models/
-✅ features/tasks/presentation/views/
+❌ lib/features/
+❌ lib/core/
+❌ lib/app/
+❌ pastas de módulo fora de uma camada (ex.: lib/tasks/)
+❌ arquivos de módulo soltos na raiz de uma camada quando o módulo já tem subpasta
 ```
 
 ---
 
-# 9. Regra de simplicidade
+# 11. Regra de simplicidade
 
-Não criar subpastas ou camadas que não sejam necessárias.
+Não criar subpastas que não sejam necessárias. Um módulo só ganha `<modulo>_componentes/` quando tiver componentes próprios.
 
-A estrutura deve crescer conforme a complexidade da Feature.
-
-Não criar abstrações ou arquivos vazios apenas para seguir a estrutura.
+Não criar arquivos vazios apenas para seguir a estrutura.
 
 A organização deve facilitar:
 

@@ -25,7 +25,7 @@ O tema escuro vale só para esta jornada. O shell continua respeitando a prefer�
 
 # Layout
 
-O corte é `AppBreakpoints.medium` (900px).
+O corte é `AppBreakpoints.medium` (900px), em `lib/src/theme/app_breakpoints.dart`.
 
 | Largura | Disposição |
 | ------- | ---------- |
@@ -44,7 +44,7 @@ No estado padrão o formulário cabe na viewport. O scroll aparece quando o tecl
 | Criar conta | Criar conta | E-mail e senha | Criar conta | Já tenho conta |
 | Recuperar senha | Recuperar senha | E-mail | Enviar | Voltar ao login |
 
-Login e criar conta também mostram Google, Facebook e GitHub. São botões ligados a `SocialAuthProvider`, sem OAuth.
+Login e criar conta também mostram Google, Facebook e GitHub. São botões ligados a `SocialAuthRepository`, sem OAuth.
 
 ---
 
@@ -77,6 +77,22 @@ E-mail e senha são considerados depois de `trim`.
 
 # Onde plugar a API
 
-`AuthProvider.signIn()` é o contrato. Hoje a tela usa `EmailPasswordAuthProvider` e `SocialAuthProvider`. Uma implementação real substitui esses stubs e devolve `AuthResult` com o status HTTP e, quando houver acesso, a `AuthSession`.
+A jornada segue as camadas da arquitetura:
 
-O redirect está em `appRouterProvider`: sem sessão, as rotas do shell voltam para `/login`; com sessão, `/login` vai para `/projetos`.
+```text
+AuthPage → AuthController → AuthService → IAuthRepository
+```
+
+| Arquivo | Responsabilidade |
+| ------- | ---------------- |
+| `lib/View/auth_view/auth_page.dart` | Splash, layout e transição para o shell |
+| `lib/View/auth_view/auth_componentes/` | Formulário, painel de código e snippet |
+| `lib/Controller/auth_controller/auth_controller.dart` | Estado do formulário (`AuthFormState`) e sessão pendente |
+| `lib/Controller/auth_controller/auth_session_controller.dart` | Sessão corrente (`authSessionProvider`) |
+| `lib/Service/auth_service/auth_service.dart` | Escolhe o Repository de e-mail/senha ou social |
+| `lib/Repository/auth_repository/auth_repository.dart` | Contrato e stubs |
+| `lib/Model/auth_model/` | `AuthIntent`, `AuthSocial`, `AuthResultModel` e `AuthSessionModel` |
+
+`IAuthRepository.signIn()` é o contrato. Hoje o `AuthService` usa os stubs `EmailPasswordAuthRepository` e `SocialAuthRepository`. Uma implementação real (ex.: `HttpAuthRepository`) substitui esses stubs e devolve `AuthResultModel` com o status HTTP e, quando houver acesso, a `AuthSessionModel`.
+
+O redirect está em `appRouterProvider` (`lib/Service/routes.dart`): sem sessão, as rotas do shell voltam para `/login`; com sessão, `/login` vai para `/projetos`.

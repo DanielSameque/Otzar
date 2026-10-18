@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:otzar/app/app.dart';
-import 'package:otzar/features/auth/domain/auth_session.dart';
-import 'package:otzar/features/auth/presentation/view_models/auth_view_model.dart';
+import 'package:otzar/Controller/auth_controller/auth_session_controller.dart';
+import 'package:otzar/Model/auth_model/auth_session_model.dart';
+import 'package:otzar/View/start_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('depois do splash mostra o login', (tester) async {
     SharedPreferences.setMockInitialValues({});
 
-    await tester.pumpWidget(const ProviderScope(child: OtzarApp()));
+    await tester.pumpWidget(const ProviderScope(child: StartWidget()));
     await tester.pump(const Duration(milliseconds: 1700));
     await tester.pump();
 
@@ -23,7 +23,7 @@ void main() {
   ) async {
     SharedPreferences.setMockInitialValues({});
 
-    await tester.pumpWidget(const ProviderScope(child: OtzarApp()));
+    await tester.pumpWidget(const ProviderScope(child: StartWidget()));
     await tester.pump(const Duration(milliseconds: 1300));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
@@ -46,7 +46,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [authSessionProvider.overrideWith(_SignedInSession.new)],
-        child: const OtzarApp(),
+        child: const StartWidget(),
       ),
     );
     await tester.pumpAndSettle();
@@ -59,7 +59,7 @@ void main() {
   });
 }
 
-class _SignedInSession extends AuthSessionNotifier {
+class _SignedInSession extends AuthSessionController {
   @override
-  AuthSession? build() => const AuthSession(email: 'dev@otzar.dev');
+  AuthSessionModel? build() => const AuthSessionModel(email: 'dev@otzar.dev');
 }

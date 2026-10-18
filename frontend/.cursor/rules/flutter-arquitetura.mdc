@@ -1,63 +1,136 @@
 ---
-description: "Arquitetura do Otzar: MVVM + Service + Repository, Riverpod, Design Patterns, SOLID e testes"
+description: "Arquitetura do Otzar: Repository + Service + MVC, Riverpod, Design Patterns, SOLID e testes"
 globs: **/*.dart
 alwaysApply: false
 ---
 
 # Arquitetura — Otzar
 
-## MVVM
+O frontend segue o mesmo padrão do QuickTrade Web (`WEB/quicktradeweb`):
 
-### View
+**Repository + Service + MVC**
 
-Responsável somente pela interface e interação do usuário.
+* **MVC:** Modelo (Model), Visão (View) e Controlador (Controller).
+* **Repository:** acesso a dados/API.
+* **Service:** lógica da operação no frontend.
 
-Não deve conter:
+Também seguir:
 
-* Regras de negócio.
-* Chamadas HTTP.
-* Acesso direto ao Repository.
-* Lógica complexa.
+* **SOLID:** procurar seguir este padrão.
+* **OOP:** classes abstratas e interfaces.
+* **Observer:** para reatividade e prevenção de `if` (Riverpod).
+* **REST:** procurar seguir os padrões REST.
+* **AAA:** Arrange, Act, Assert nos testes unitários.
 
-### ViewModel
+---
 
-Responsável pelo estado e comportamento da tela/feature.
+## Fluxo entre as camadas
 
-Deve:
-
-* Expor estado para a View.
-* Processar ações do usuário.
-* Chamar Services.
-* Controlar loading, sucesso e erro.
-* Utilizar Riverpod para reatividade.
-
-### Service
-
-Responsável por orquestrar a operação da feature no frontend.
-
-Pode:
-
-* Coordenar múltiplos Repositories.
-* Compor e preparar os dados de uma operação de tela.
-* Traduzir erros de negócio da API em falhas tratáveis pela ViewModel.
-* Aplicar validações de entrada já definidas pelo backend, apenas para retorno imediato ao usuário.
-
-Não deve definir regras de negócio próprias. O backend é a fonte de verdade, conforme a seção **Regras de negócio** desta regra.
-
-### Repository
-
-Responsável pelo acesso aos dados.
-
-Deve esconder detalhes de infraestrutura da aplicação.
-
-Exemplo:
+```mermaid
+flowchart TD
+    View["View (Page)"] -->|"1 usuário interage"| Controller
+    Controller -->|"2 chama a operação"| Service
+    Service -->|"3 solicita dados"| Repository
+    Repository -->|"4 requisição HTTP"| Api["API NestJS"]
+    Api -->|"5 JSON"| Repository
+    Repository -->|"6 converte em Model"| Service
+    Service -->|"7 devolve o Model"| Controller
+    Controller -->|"8 atualiza o estado"| View
+```
 
 ```text
-TaskViewModel
+View → Controller → Service → Repository → ApiClient → API REST
+```
+
+Uma camada só conhece a camada imediatamente abaixo dela. A View nunca acessa Service, Repository ou ApiClient diretamente.
+
+---
+
+## Model
+
+Estrutura de dados.
+
+* Representa o JSON da API como objeto Dart.
+* Utilizar **Freezed** quando o Model precisar de imutabilidade, `copyWith`, igualdade por valor ou serialização JSON.
+* Não contém regras de negócio, chamadas HTTP ou estado de tela.
+
+```dart
+@freezed
+abstract class TaskModel with _$TaskModel {
+  const factory TaskModel({
+    required int id,
+    required String title,
+    required String status,
+  }) = _TaskModel;
+
+  factory TaskModel.fromJson(Map<String, dynamic> json) =>
+      _$TaskModelFromJson(json);
+}
+```
+
+## Repository
+
+Acesso aos dados.
+
+* Declarar o contrato em uma interface `abstract class I<Nome>Repository`.
+* Implementar em `Http<Nome>Repository` (ou outra implementação, como stubs).
+* Usar o `ApiClient` (`Service/http_service.dart`) para HTTP.
+* Converter a resposta da API em Model.
+* Não contém regra de negócio.
+
+```dart
+abstract class ITaskRepository {
+  Future<List<TaskModel>> fetchAll();
+}
+
+class HttpTaskRepository implements ITaskRepository {
+  const HttpTaskRepository(this._apiClient);
+
+  final ApiClient _apiClient;
+
+  @override
+  Future<List<TaskModel>> fetchAll() async { ... }
+}
+```
+
+## Service
+
+Lógica da operação no frontend.
+
+* **Sempre existe** entre Controller e Repository, mesmo quando apenas repassa a chamada.
+* Recebe o Repository pela interface (`I<Nome>Repository`). Quando a implementação depende dos dados da operação, o Service escolhe a implementação (ex.: `AuthService` com `EmailPasswordAuthRepository` ou `SocialAuthRepository`).
+* Pode coordenar múltiplos Repositories e preparar os dados de uma operação de tela.
+* Pode reproduzir validações de entrada **já definidas pelo backend**, apenas para retorno imediato ao usuário.
+* Não define regras de negócio próprias. Ver **Regras de negócio** abaixo.
+
+## Controller
+
+Estado e comportamento da tela.
+
+* Implementado como `Notifier` ou `AsyncNotifier` do Riverpod.
+* Exposto por um provider `<nome>ControllerProvider`.
+* Processa as ações do usuário e chama o Service.
+* Controla carregando, vazio, sucesso e erro.
+* Não chama Repository nem ApiClient diretamente.
+
+## View
+
+Interface e interação do usuário.
+
+* Telas são `Page` (`*_page.dart`); componentes são widgets.
+* Observa o Controller (`ref.watch`) e dispara ações (`ref.read(...notifier)`).
+* Não contém regra de negócio, chamadas HTTP ou acesso ao Repository/Service.
+
+Exemplo de composição:
+
+```text
+TaskPage
+ ↓
+TaskController
  ↓
 TaskService
  ↓
-TaskRepository
+ITaskRepository (HttpTaskRepository)
  ↓
 ApiClient
 ```
@@ -87,41 +160,14 @@ As regras aplicadas pelo backend estão em `docs/04-regras-de-negocio.md`. Ao en
 
 Utilizar Riverpod para:
 
-* Gerenciamento de estado.
-* Injeção de dependências.
-* Estados assíncronos.
-* Reatividade.
+* Controllers (gerenciamento de estado).
+* Injeção de dependências de Services, Repositories e ApiClient.
+* Estados assíncronos (`AsyncValue`).
+* Reatividade (Observer).
 
-Manter Providers pequenos e relacionados à sua responsabilidade.
+Manter Providers pequenos e declarados junto da classe que fornecem.
 
 Não concentrar regras de negócio dentro dos Providers.
-
----
-
-## Models
-
-Utilizar **Freezed** para Models que precisem de:
-
-* Imutabilidade.
-* `copyWith`.
-* Igualdade por valor.
-* Serialização JSON.
-
-Exemplo:
-
-```dart
-@freezed
-class Task with _$Task {
-  const factory Task({
-    required int id,
-    required String title,
-    required String status,
-  }) = _Task;
-
-  factory Task.fromJson(Map<String, dynamic> json) =>
-      _$TaskFromJson(json);
-}
-```
 
 ---
 
@@ -129,20 +175,16 @@ class Task with _$Task {
 
 Utilizar Design Patterns somente quando resolverem um problema real.
 
+### MVC
+
+Separa dados (Model), apresentação (View) e estado/comportamento (Controller).
+
 ### Repository Pattern
 
 Isola o acesso aos dados da lógica da aplicação.
 
 ```text
-Service → Repository → API
-```
-
-### MVVM
-
-Separa apresentação, estado e lógica da View.
-
-```text
-View → ViewModel
+Service → I<Nome>Repository → API
 ```
 
 ### Observer / Reactive
@@ -153,12 +195,7 @@ Evitar verificações manuais quando uma dependência reativa resolver o problem
 
 ### Dependency Injection
 
-Utilizar Riverpod para injetar:
-
-* Services.
-* Repositories.
-* ApiClient.
-* Outras dependências.
+Utilizar Riverpod para injetar Services, Repositories, ApiClient e outras dependências.
 
 ### Factory
 
@@ -180,9 +217,7 @@ Procurar seguir SOLID:
 * **OCP:** permitir extensão sem alterações desnecessárias.
 * **LSP:** respeitar contratos das abstrações.
 * **ISP:** preferir interfaces pequenas.
-* **DIP:** depender de abstrações quando houver benefício real.
-
-Não criar interfaces ou abstrações sem necessidade.
+* **DIP:** depender de abstrações (`I<Nome>Repository`).
 
 ---
 
@@ -191,8 +226,7 @@ Não criar interfaces ou abstrações sem necessidade.
 Utilizar:
 
 * Classes.
-* Interfaces.
-* Classes abstratas.
+* Interfaces e classes abstratas (contratos dos Repositories).
 * Composição.
 * Encapsulamento.
 * Polimorfismo.
@@ -239,18 +273,19 @@ Assert
 
 Priorizar testes para:
 
+* Controllers.
 * Services.
-* ViewModels.
-* Regras de negócio.
-* Repositories com lógica relevante.
+* Repositories com lógica de tradução relevante.
+
+As regras de negócio são testadas no backend, onde são efetivamente aplicadas.
 
 ---
 
 # Regra de simplicidade
 
-Não criar camadas, classes, interfaces ou Design Patterns apenas para seguir a arquitetura.
+As camadas Model, Repository, Service, Controller e View fazem parte da arquitetura e devem existir para cada módulo com dados.
 
-Antes de adicionar uma abstração, verificar se existe uma necessidade real.
+Além delas, não criar classes, interfaces extras ou Design Patterns apenas para seguir a arquitetura.
 
 Prioridade:
 

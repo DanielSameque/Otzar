@@ -2,13 +2,19 @@
 
 O Otzar é composto por um **frontend Flutter** (Web e mobile) e um **backend NestJS** que expõe uma API REST. As duas aplicações são independentes e se comunicam apenas por HTTPS.
 
-O frontend adota **MVVM + Service + Repository**, com foco em separação de responsabilidades, testabilidade e simplicidade.
+O frontend adota **Repository + Service + MVC**, a mesma arquitetura do QuickTrade Web (`WEB/quicktradeweb`), com foco em separação de responsabilidades, testabilidade e simplicidade.
+
+* **MVC:** Modelo (Model), Visão (View) e Controlador (Controller).
+* **Repository:** acesso a dados/API.
+* **Service:** lógica da operação no frontend.
+
+Também seguem o padrão do WEB: **SOLID**, **OOP** (classes abstratas e interfaces), **Observer** (reatividade com Riverpod), **REST** e **AAA** nos testes unitários.
 
 ```mermaid
 flowchart LR
     subgraph Frontend["Frontend — Flutter"]
-        V["View"] --> VM["ViewModel"]
-        VM --> S["Service"]
+        V["View"] --> C["Controller"]
+        C --> S["Service"]
         S --> R["Repository"]
         R --> AC["ApiClient"]
     end
@@ -26,21 +32,36 @@ flowchart LR
 
 # Camadas do frontend
 
-| Camada         | Responsabilidade                                              | Não deve                                                  |
-| -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
-| **View**       | Interface e interação do usuário                              | Conter lógica de negócio, HTTP ou acesso ao Repository    |
-| **ViewModel**  | Estado da tela, ações do usuário, loading/sucesso/erro        | Conter regra de negócio ou chamar o ApiClient             |
-| **Service**    | Orquestrar a operação e aplicar validações de interface        | Redefinir regras de negócio do domínio                    |
-| **Repository** | Acesso aos dados e tradução das respostas da API em Models     | Conter regra de negócio                                   |
-| **ApiClient**  | Infraestrutura HTTP, cabeçalhos, autenticação e erros de rede  | Conhecer telas, ViewModels ou entidades específicas       |
+| Camada         | Pasta          | Responsabilidade                                              | Não deve                                                  |
+| -------------- | -------------- | ------------------------------------------------------------- | --------------------------------------------------------- |
+| **Model**      | `Model/`       | Estrutura de dados (Freezed)                                  | Conter regra de negócio, HTTP ou estado de tela           |
+| **Repository** | `Repository/`  | Acesso aos dados (`I<Nome>Repository`) e tradução do JSON em Models | Conter regra de negócio                              |
+| **Service**    | `Service/`     | Orquestrar a operação e aplicar validações de interface        | Redefinir regras de negócio do domínio                    |
+| **Controller** | `Controller/`  | Estado da tela, ações do usuário, carregando/sucesso/erro      | Conter regra de negócio ou chamar Repository/ApiClient    |
+| **View**       | `View/`        | Interface e interação do usuário (`*_page.dart`)               | Conter lógica de negócio, HTTP ou acesso ao Service       |
+| **ApiClient**  | `Service/http_service.dart` | Infraestrutura HTTP, cabeçalhos, autenticação e erros de rede | Conhecer telas, Controllers ou entidades específicas |
 
 O fluxo de dependências é unidirecional. Uma camada só conhece a camada imediatamente abaixo dela.
 
 ```text
-View → ViewModel → Service → Repository → ApiClient → REST API
+View → Controller → Service → Repository → ApiClient → REST API
 ```
 
-A View nunca acessa diretamente Repository, ApiClient ou qualquer serviço de infraestrutura.
+A View nunca acessa diretamente Service, Repository, ApiClient ou qualquer serviço de infraestrutura. O Service existe em todo módulo, mesmo quando apenas repassa a chamada ao Repository.
+
+```mermaid
+flowchart TD
+    A["View (Page)"] -->|"1 usuário interage"| B["Controller"]
+    B -->|"2 chama a operação"| C["Service"]
+    C -->|"3 solicita dados"| D["Repository"]
+    D -->|"4 requisição HTTP"| F["API NestJS"]
+    F -->|"5 retorna JSON"| D
+    D -->|"6 converte em Model"| E["Model"]
+    E -->|"7 objeto retornado"| D
+    D -->|"8 retorna o Model"| C
+    C -->|"9 retorna o Model"| B
+    B -->|"10 atualiza o estado da View"| A
+```
 
 A organização física dessas camadas em pastas está definida em `.cursor/rules/flutter-estrutura-do-projeto.mdc`.
 
@@ -61,10 +82,10 @@ O frontend não é uma barreira de segurança: qualquer cliente pode chamar a AP
 
 ## Frontend
 
-A camada `domain/services` do Flutter **não redefine regras de negócio**. Ela existe para:
+A camada `Service/` do Flutter **não redefine regras de negócio**. Ela existe para:
 
 * Orquestrar chamadas a um ou mais Repositories em uma única operação de tela.
-* Traduzir os erros de negócio devolvidos pela API em estados que a ViewModel consegue exibir.
+* Traduzir os erros de negócio devolvidos pela API em estados que o Controller consegue exibir.
 * Reproduzir, na interface, restrições **já definidas pelo backend**, apenas para dar retorno imediato ao usuário (campo obrigatório, formato inválido, ação indisponível no estado atual).
 
 Essa reprodução é uma conveniência de usabilidade, nunca uma decisão. Se a regra existe no frontend, ela existe porque o backend a define — e o backend continua validando.
@@ -85,22 +106,22 @@ Nunca implementar no Flutter uma regra que o backend não conheça, e nunca conf
 sequenceDiagram
     participant U as Usuário
     participant V as View
-    participant VM as ViewModel
+    participant C as Controller
     participant S as Service
     participant R as Repository
     participant A as API (NestJS)
 
     U->>V: Executa ação
-    V->>VM: Solicita operação
-    VM->>VM: Estado = carregando
-    VM->>S: Executa operação
+    V->>C: Solicita operação
+    C->>C: Estado = carregando
+    C->>S: Executa operação
     S->>R: Solicita dados
     R->>A: Requisição HTTP
     A->>A: Valida regras de negócio
     A-->>R: Resposta ou erro
     R-->>S: Model ou falha
-    S-->>VM: Resultado
-    VM-->>V: Estado = sucesso ou erro
+    S-->>C: Resultado
+    C-->>V: Estado = sucesso ou erro
     V-->>U: Atualiza interface
 ```
 
@@ -112,7 +133,7 @@ Quando o backend rejeita uma operação, o erro sobe pelas mesmas camadas até v
 
 O gerenciamento de estado e a injeção de dependências utilizam **Riverpod**.
 
-* A ViewModel expõe o estado da tela para a View.
+* O Controller (`Notifier`/`AsyncNotifier`) expõe o estado da tela para a View.
 * Services, Repositories e o ApiClient são injetados por Providers.
 * Providers não concentram regra de negócio.
 
@@ -126,8 +147,10 @@ A separação em camadas existe para permitir testar o comportamento sem a inter
 
 Prioridade de testes no frontend:
 
-* Services e ViewModels.
+* Controllers e Services.
 * Repositories que possuam lógica de tradução relevante.
+
+Os testes seguem **AAA** (Arrange, Act, Assert) e ficam em `test/`, espelhando a camada do arquivo testado (`test/Repository/...`, `test/Controller/...`).
 
 As regras de negócio são testadas no backend, onde são efetivamente aplicadas.
 
@@ -137,7 +160,7 @@ As regras de negócio são testadas no backend, onde são efetivamente aplicadas
 
 ## Frontend
 
-* `13-fundacao.md` — o que a fundação já implementa e como conectar uma nova Feature.
+* `13-fundacao.md` — o que a fundação já implementa e como conectar um novo módulo.
 * `.cursor/rules/flutter-arquitetura.mdc` — padrões de implementação da arquitetura no código Dart.
 * `.cursor/rules/flutter-estrutura-do-projeto.mdc` — organização das pastas e arquivos.
 

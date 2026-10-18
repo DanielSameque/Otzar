@@ -75,8 +75,8 @@ Para representar um fluxo entre componentes:
 
 ```mermaid
 flowchart LR
-    View --> ViewModel
-    ViewModel --> Service
+    View --> Controller
+    Controller --> Service
     Service --> Repository
     Repository --> API
 ```
@@ -86,14 +86,14 @@ Para representar uma sequência de comunicação:
 ```mermaid
 sequenceDiagram
     Usuario->>View: Executa ação
-    View->>ViewModel: Solicita operação
-    ViewModel->>Service: Executa regra
+    View->>Controller: Solicita operação
+    Controller->>Service: Executa operação
     Service->>Repository: Solicita dados
     Repository->>API: Requisição
     API-->>Repository: Resposta
-    Repository-->>Service: Dados
-    Service-->>ViewModel: Resultado
-    ViewModel-->>View: Atualiza interface
+    Repository-->>Service: Model
+    Service-->>Controller: Resultado
+    Controller-->>View: Atualiza interface
 ```
 
 Os diagramas devem permanecer sincronizados com o comportamento atual do sistema. Sempre que uma alteração de código modificar o fluxo representado, o diagrama também deve ser atualizado.

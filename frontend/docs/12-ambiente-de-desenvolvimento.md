@@ -120,7 +120,7 @@ cd C:\GitHub\Otzar\frontend
 flutter run -d chrome --dart-define=API_URL=http://localhost:3000
 ```
 
-A URL da API nunca fica fixa no código: é lida de `API_URL` por `lib\core\config\app_config.dart`, que assume `http://localhost:3000` quando o valor não é informado.
+A URL da API nunca fica fixa no código: é lida de `API_URL` por `lib\Service\app_config.dart`, que assume `http://localhost:3000` quando o valor não é informado.
 
 Para confirmar que o frontend conversa com a API, abrir o ícone de **Diagnóstico** na barra superior do aplicativo. A tela exibe o endereço consultado, o status da API e o estado da conexão com o banco.
 

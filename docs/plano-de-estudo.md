@@ -16,7 +16,7 @@ Antes de aprofundar, fixe isto:
 | Camada   | O que é no Otzar                             |
 | -------- | -------------------------------------------- |
 | Produto  | Gestão de projetos + tickets + base Markdown |
-| Frontend | Flutter (Web + mobile), MVVM                 |
+| Frontend | Flutter (Web + mobile), Repository + Service + MVC |
 | Backend  | NestJS (Node.js + TypeScript), API REST      |
 | Dados    | Prisma 7 → PostgreSQL (Neon)                 |
 | Deploy   | Render (site estático + web service)         |
@@ -58,7 +58,7 @@ Pontos principais:
 - O que são rules (instruções persistentes do agente)
 - Always apply vs globs (`**/*.dart`, `backend/**/*.ts`)
 - A rule de documentação: ler docs antes, atualizar depois
-- Rules de arquitetura Flutter (View → ViewModel → Service → Repository)
+- Rules de arquitetura Flutter (View → Controller → Service → Repository)
 - Rules NestJS (Controller → Service → Prisma; regras de negócio no backend)
 
 **Prática:** ler uma rule Flutter e explicar, em 5 linhas, o que o agente não pode fazer.
@@ -177,7 +177,7 @@ Ordem de leitura sugerida:
 
 - Dart básico (tipos, async, null safety)
 - Widgets, navegação, estado
-- Arquitetura Otzar: **MVVM + Service + Repository + ApiClient**
+- Arquitetura Otzar: **Repository + Service + MVC + ApiClient** (mesma do QuickTrade Web)
 - Web + mobile, uma base
 - `API_URL` via `--dart-define`
 - Fundação: `[frontend/docs/13-fundacao.md](../frontend/docs/13-fundacao.md)` + rules `flutter-*.mdc`
@@ -235,7 +235,7 @@ Detalhes em `[08-stack-tecnologica.md](../frontend/docs/08-stack-tecnologica.md)
 
 - [ ] Sobe backend e frontend localmente (`[12-ambiente-de-desenvolvimento.md](../frontend/docs/12-ambiente-de-desenvolvimento.md)`)
 - [ ] Sabe onde documentar produto vs backend (`[docs/README.md](README.md)`)
-- [ ] Entende MVVM Flutter e camadas NestJS
+- [ ] Entende MVC Flutter (Repository + Service + MVC) e camadas NestJS
 - [ ] Sabe que regras de negócio mudam primeiro no backend + `[04-regras-de-negocio.md](../frontend/docs/04-regras-de-negocio.md)`
 - [ ] Lê a rule relevante antes de pedir mudança ao Agent
 - [ ] Escreve specs curtas em vez de prompts vagos

@@ -18,10 +18,10 @@ O breakpoint responsivo global do frontend Otzar é **900px**.
 ## Obrigações ao implementar UI
 
 - Usar **900** como único limiar padrão para trocar layout (não inventar 768, 600, 1024 etc. sem necessidade documentada).
-- Preferir uma constante central (ex.: `AppBreakpoints.medium = 900` ou nome equivalente já usado no projeto) em vez de literais espalhados.
+- Usar a constante central `AppBreakpoints.medium = 900`, em `lib/src/theme/app_breakpoints.dart`, em vez de literais espalhados.
 - Avaliar com `LayoutBuilder`, `MediaQuery.sizeOf(context).width` ou utilitário do design system — sempre com o mesmo limiar.
-- Telas de autenticação, shell e features novas devem respeitar este breakpoint por padrão.
-- Se uma tela precisar de um limiar diferente, documentar a exceção na documentação da feature e justificar o motivo.
+- Telas de autenticação, shell e módulos novos devem respeitar este breakpoint por padrão.
+- Se uma tela precisar de um limiar diferente, documentar a exceção na documentação do módulo e justificar o motivo.
 
 ## Exemplos de aplicação
 
