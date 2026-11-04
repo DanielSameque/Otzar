@@ -18,7 +18,7 @@ Antes de aprofundar, fixe isto:
 | Produto  | Gestão de projetos + tickets + base Markdown |
 | Frontend | Flutter (Web + mobile), Repository + Service + MVC |
 | Backend  | NestJS (Node.js + TypeScript), API REST      |
-| Dados    | Prisma 7 → PostgreSQL (Neon)                 |
+| Dados    | Prisma 7 → SQL Server 2025 (Azure SQL Database) |
 | Deploy   | Render (site estático + web service)         |
 | Agente   | Cursor com Rules + Skills + docs             |
 
@@ -194,12 +194,12 @@ Ordem de leitura sugerida:
 
 **Prática:** ler o endpoint `GET /health` (código + `[backend/docs/endpoints/health.md](../backend/docs/endpoints/health.md)`).
 
-## 4.3 PostgreSQL + Prisma
+## 4.3 SQL Server 2025 + Prisma
 
 - Modelo relacional, FKs, transações
 - Prisma schema, migrate, generate, Client
-- Prisma 7 + `adapter-pg` + `prisma.config.ts` (decisão documentada em `[08-stack-tecnologica.md](../frontend/docs/08-stack-tecnologica.md)`)
-- Neon em cloud; local via `DATABASE_URL`
+- Prisma 7 + `adapter-mssql` + `prisma.config.ts` (decisão documentada em `[08-stack-tecnologica.md](../frontend/docs/08-stack-tecnologica.md)`)
+- Azure SQL Database em cloud; local via Docker (`mcr.microsoft.com/mssql/server:2025-latest`) e `DATABASE_URL`
 - Frontend **nunca** acessa o banco
 
 **Prática:** relacionar 3 entidades do `[03-modelo-de-dados](../frontend/docs/03-modelo-de-dados.md)` com o que existiria no schema Prisma.
@@ -224,7 +224,7 @@ Detalhes em `[08-stack-tecnologica.md](../frontend/docs/08-stack-tecnologica.md)
 | 1      | Cursor (geral + rules + skills) + setup local | Ambiente sobe; sabe onde estão as rules      |
 | 2      | Otzar produto (visão → MVP → modelo → regras) | Consegue explicar o domínio sem código       |
 | 3      | Flutter + NestJS na arquitetura do repo       | Desenha o fluxo de uma tela até o banco      |
-| 4      | Prisma/PostgreSQL + IA (RAG/harness/spec)     | Spec de uma feature MVP + ideia de RAG na KB |
+| 4      | Prisma/SQL Server + IA (RAG/harness/spec)     | Spec de uma feature MVP + ideia de RAG na KB |
 
 
 ---

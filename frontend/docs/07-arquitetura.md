@@ -25,7 +25,7 @@ flowchart LR
     end
 
     AC -->|"HTTPS / REST"| CT
-    PR --> DB[("PostgreSQL")]
+    PR --> DB[("SQL Server 2025")]
 ```
 
 ---

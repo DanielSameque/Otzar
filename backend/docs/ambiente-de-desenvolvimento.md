@@ -17,12 +17,12 @@ node --version
 npm --version
 ```
 
-## PostgreSQL local (opcional)
+## SQL Server 2025 local (opcional)
 
-O backend utiliza PostgreSQL. Em desenvolvimento existem duas opções:
+O backend utiliza **SQL Server 2025**. Em desenvolvimento existem duas opções:
 
 * **Docker** — subir o banco com o `docker-compose.yml` versionado nesta pasta.
-* **Neon** — apontar `DATABASE_URL` para o banco gerenciado, conforme [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md).
+* **Azure SQL Database** — apontar `DATABASE_URL` para o banco gerenciado, conforme [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md).
 
 Com Docker instalado:
 
@@ -31,9 +31,23 @@ cd C:\GitHub\Otzar\backend
 docker compose up -d
 ```
 
-O container expõe o PostgreSQL em `localhost:5432` com usuário, senha e banco `otzar`.
+O `docker-compose.yml` sobe dois serviços:
 
-A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"` em vez de impedir a inicialização. Isso permite desenvolver o frontend antes de configurar o PostgreSQL.
+| Serviço | Função |
+| ------- | ------ |
+| `sqlserver` | SQL Server 2025, edição Developer, exposto em `localhost:1433`. Usuário `sa`, senha `Otzar@Dev2025`. |
+| `sqlserver-init` | Executa uma única vez, após o `sqlserver` ficar saudável, e cria o banco `otzar` se ele ainda não existir. |
+
+A imagem do SQL Server não cria bancos por variável de ambiente, por isso o serviço de inicialização é necessário. A senha do `sa` precisa atender à política de senha forte do SQL Server (8+ caracteres com maiúsculas, minúsculas, números e símbolos); caso contrário o container não inicia.
+
+A primeira inicialização do SQL Server leva alguns segundos. Acompanhar com:
+
+```powershell
+docker compose ps
+docker compose logs sqlserver-init
+```
+
+A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"` em vez de impedir a inicialização. Isso permite desenvolver o frontend antes de configurar o SQL Server.
 
 ---
 
@@ -58,8 +72,18 @@ Copy-Item .env.example .env
 | -------- | ---------- |
 | `PORT` | Porta da API. Padrão `3000`. |
 | `CORS_ORIGIN` | Origens liberadas, separadas por vírgula. `*` libera todas. |
-| `DATABASE_URL` | Conexão com o PostgreSQL. |
+| `DATABASE_URL` | Conexão com o SQL Server, no formato `sqlserver://HOST:PORTA;chave=valor;...`. |
 | `JWT_SECRET` | Segredo do JWT, utilizado a partir do módulo de Autenticação. |
+
+Valor padrão para o container local:
+
+```text
+sqlserver://localhost:1433;database=otzar;user=sa;password=Otzar@Dev2025;encrypt=true;trustServerCertificate=true
+```
+
+`trustServerCertificate=true` é necessário localmente porque o container usa certificado TLS autoassinado. Em produção (Azure SQL Database) usar `trustServerCertificate=false`.
+
+Se a senha tiver `;`, `=` ou `{`, envolver o valor em chaves: `password={minha;senha}`.
 
 O arquivo `.env` não deve ser versionado.
 
@@ -73,7 +97,9 @@ O Prisma Client é gerado a partir do schema e **não é versionado**. Gerar ap�
 npm run prisma:generate
 ```
 
-A URL de conexão fica em `prisma.config.ts` e o `PrismaClient` recebe o adaptador `@prisma/adapter-pg`, conforme exigido pelo Prisma 7.
+O `prisma.config.ts` lê a `DATABASE_URL` do `.env`. Sem essa variável, o `prisma generate` falha com `Cannot resolve environment variable: DATABASE_URL`.
+
+O schema usa o provider `sqlserver`. A URL de conexão fica em `prisma.config.ts` e o `PrismaClient` recebe o adaptador `@prisma/adapter-mssql`, conforme exigido pelo Prisma 7. O adaptador interpreta a mesma `DATABASE_URL` usada pelo CLI.
 
 > Não atualizar o Prisma com `npm install prisma@latest`. A tag `latest` do npm aponta para o CLI da Prisma Developer Platform, que é outro produto e não possui os comandos `generate` e `migrate`. O motivo está em [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md).
 
@@ -123,7 +149,7 @@ Resposta esperada com banco disponível:
 
 # Deploy (Render)
 
-O backend NestJS roda como **Web Service** no Render e o PostgreSQL fica no **Neon**, conforme [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md).
+O backend NestJS roda como **Web Service** no Render e o SQL Server fica no **Azure SQL Database**, conforme [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md).
 
 ```text
 Root Directory:  backend
@@ -132,3 +158,5 @@ Start Command:   npm run start:prod
 ```
 
 Definir `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN` nas variáveis do serviço. O `CORS_ORIGIN` deve conter a URL do Site Estático do frontend, já que frontend e backend possuem domínios distintos.
+
+O firewall do Azure SQL Database precisa liberar os IPs de saída do Web Service do Render; sem isso, `GET /health` responde `database: "down"`.

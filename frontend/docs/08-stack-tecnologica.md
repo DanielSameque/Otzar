@@ -2,9 +2,9 @@
 
 ## Visão Geral
 
-O Otzar utiliza uma arquitetura multiplataforma baseada em **Flutter no frontend**, **NestJS no backend**, **Prisma como ORM** e **PostgreSQL como banco de dados**.
+O Otzar utiliza uma arquitetura multiplataforma baseada em **Flutter no frontend**, **NestJS no backend**, **Prisma como ORM** e **SQL Server 2025 como banco de dados**.
 
-Para hospedagem, o **Flutter Web** e o **backend NestJS** serão executados no **Render**, e o banco de dados será hospedado no **Neon**.
+Para hospedagem, o **Flutter Web** e o **backend NestJS** serão executados no **Render**, e o banco de dados será hospedado no **Azure SQL Database**, a versão gerenciada do SQL Server na Microsoft Azure.
 
 O Render concentra as duas aplicações no mesmo painel: o frontend como **Site Estático** e o backend como **Web Service**.
 
@@ -15,7 +15,7 @@ flowchart TD
     B["Render<br/>Site Estático: build/web"]
     C["Render<br/>Web Service: NestJS"]
     D["Prisma"]
-    E["Neon<br/>PostgreSQL"]
+    E["Azure SQL Database<br/>SQL Server"]
 
     A --> B
     B -->|"HTTPS / REST"| C
@@ -40,7 +40,7 @@ Flutter Web
               └── Prisma
                     │
                     ▼
-                Neon PostgreSQL
+                Azure SQL Database (SQL Server)
 ```
 
 Os aplicativos móveis Flutter não são hospedados: consomem diretamente a mesma API do NestJS via HTTPS.
@@ -105,7 +105,7 @@ A arquitetura do backend deverá priorizar separação de responsabilidades e fa
 
 **Tecnologia:** Prisma ORM
 
-O Prisma será utilizado como camada de acesso ao banco de dados entre o NestJS e o PostgreSQL.
+O Prisma será utilizado como camada de acesso ao banco de dados entre o NestJS e o SQL Server.
 
 ```text
 NestJS
@@ -114,7 +114,7 @@ NestJS
 Prisma
    │
    ▼
-PostgreSQL
+SQL Server 2025
 ```
 
 ### Responsabilidades
@@ -135,7 +135,7 @@ PostgreSQL
 * Autocomplete durante o desenvolvimento.
 * Redução de erros em consultas.
 * Sistema de migrations.
-* Integração adequada com PostgreSQL.
+* Suporte oficial ao SQL Server (provider `sqlserver`).
 * Boa integração com NestJS.
 
 O Prisma deverá permanecer concentrado na camada de acesso a dados, evitando que Controllers ou outras camadas da aplicação acessem o banco diretamente.
@@ -145,12 +145,14 @@ O Prisma deverá permanecer concentrado na camada de acesso a dados, evitando qu
 O Otzar utiliza o **Prisma ORM 7**, versão mais recente do ORM. Os três pacotes são fixados em `^7.10.0`:
 
 ```text
-prisma               # CLI do ORM
-@prisma/client       # runtime consultado pela aplicação
-@prisma/adapter-pg   # driver adapter do PostgreSQL
+prisma                  # CLI do ORM
+@prisma/client          # runtime consultado pela aplicação
+@prisma/adapter-mssql   # driver adapter do SQL Server (usa o driver mssql/tedious)
 ```
 
 A partir da versão 7, o ORM exige a URL de conexão em `prisma.config.ts` e um driver adapter passado ao `PrismaClient`. A `url` deixou de ser aceita no bloco `datasource` do schema.
+
+O `@prisma/adapter-mssql` aceita a mesma `DATABASE_URL` no formato `sqlserver://` usada pelo CLI do Prisma, então migrations e runtime compartilham uma única variável.
 
 ### Por que não a versão 8
 
@@ -158,10 +160,10 @@ O pacote `prisma@8` **não é uma versão mais nova do ORM**: é o CLI da **Pris
 
 A versão 8 não foi adotada porque:
 
-* Não existe `@prisma/client` nem `@prisma/adapter-pg` na versão 8. O runtime consumido pela aplicação só existe até a 7.10.0.
+* Não existe `@prisma/client` nem `@prisma/adapter-mssql` na versão 8. O runtime consumido pela aplicação só existe até a 7.10.0.
 * O CLI 8 não expõe `generate` nem `migrate` no nível principal, quebrando os scripts `prisma:generate` e `prisma:migrate` do backend.
 * A versão publicada é *release candidate*, não estável.
-* A plataforma é orientada ao Prisma Postgres, enquanto o Otzar hospeda o banco no **Neon** e a aplicação no **Render**.
+* A plataforma é orientada ao Prisma Postgres, enquanto o Otzar usa **SQL Server** hospedado no **Azure SQL Database** e a aplicação no **Render**.
 
 O CLI 8 é publicado sob a tag `latest` do npm. Por isso os pacotes são fixados explicitamente em `^7.10.0`: um `npm install` sem restrição instala o CLI da plataforma e quebra a geração do Prisma Client.
 
@@ -169,25 +171,37 @@ Essa decisão deve ser reavaliada quando o `@prisma/client` na versão 8 for pub
 
 ---
 
-# 🐘 Banco de Dados — PostgreSQL
+# 🗃️ Banco de Dados — SQL Server 2025
 
-**Tecnologia:** PostgreSQL
+**Tecnologia:** Microsoft SQL Server 2025
 
-O PostgreSQL será o banco de dados relacional do Otzar.
+O SQL Server 2025 será o banco de dados relacional do Otzar.
 
 ### Motivos da escolha
 
 * Banco de dados relacional maduro e consolidado.
-* Código aberto.
 * Excelente suporte a relacionamentos.
 * Integridade referencial.
 * Transações.
 * Índices e consultas avançadas.
-* Grande adoção pela comunidade.
-* Compatibilidade com Prisma.
-* Facilidade de migração entre provedores de hospedagem.
+* Ferramental consolidado (SQL Server Management Studio, Azure Data Studio, `sqlcmd`).
+* Compatibilidade com Prisma (provider `sqlserver`).
+* Mesmo motor em desenvolvimento (container Docker) e produção (Azure SQL Database).
 
-O PostgreSQL será utilizado para armazenar os dados persistentes do sistema, incluindo usuários, projetos, clientes, tarefas, sprints e demais entidades do Otzar.
+### Edições utilizadas
+
+| Ambiente | Edição | Observação |
+| -------- | ------ | ---------- |
+| Desenvolvimento local | **Developer** (imagem `mcr.microsoft.com/mssql/server:2025-latest`) | Gratuita, todos os recursos, uso restrito a desenvolvimento e testes. |
+| Produção | **Azure SQL Database** | Serviço gerenciado, sempre na versão mais recente do motor do SQL Server. |
+
+### Particularidades em relação a outros bancos
+
+* O SQL Server **não cria o banco automaticamente** a partir de variáveis de ambiente do container. O `docker-compose.yml` do backend inclui um serviço de inicialização que cria o banco `otzar`.
+* A conexão usa TLS. Em desenvolvimento, o container usa certificado autoassinado, por isso a `DATABASE_URL` local inclui `trustServerCertificate=true`. Em produção esse parâmetro deve ser `false`.
+* O schema padrão é `dbo`.
+
+O SQL Server será utilizado para armazenar os dados persistentes do sistema, incluindo usuários, projetos, clientes, tarefas, sprints e demais entidades do Otzar.
 
 ---
 
@@ -263,12 +277,13 @@ A utilização do Render reduz a necessidade de administrar manualmente servidor
 
 ---
 
-# 🐘 Hospedagem do Banco — Neon
+# 🗃️ Hospedagem do Banco — Azure SQL Database
 
-**Plataforma:** Neon
-**Banco:** PostgreSQL
+**Plataforma:** Microsoft Azure
+**Serviço:** Azure SQL Database (camada *serverless*)
+**Banco:** SQL Server
 
-O PostgreSQL será hospedado no Neon.
+O SQL Server será hospedado no Azure SQL Database.
 
 ```text
 NestJS
@@ -276,22 +291,31 @@ NestJS
  Prisma
    │
    ▼
-Neon
+Azure SQL Database
    │
-PostgreSQL
+SQL Server
 ```
 
 ### Motivos da escolha
 
-* PostgreSQL totalmente gerenciado.
-* Plano gratuito adequado para desenvolvimento e MVP.
+* SQL Server totalmente gerenciado, com o mesmo motor usado no desenvolvimento local.
+* Oferta gratuita do Azure SQL Database, adequada para desenvolvimento e MVP.
+* Camada *serverless* com pausa automática quando ocioso, reduzindo custo.
 * Não exige administração manual do servidor de banco.
-* Escalabilidade.
 * Backups e recursos de gerenciamento oferecidos pela plataforma.
 * Integração simples através da `DATABASE_URL`.
 * Compatibilidade com Prisma.
 
-O Neon foi escolhido inicialmente visando **reduzir o custo de desenvolvimento e validação do MVP**, mantendo PostgreSQL como banco principal.
+### Configuração
+
+* Cadastrar no firewall do servidor Azure SQL os IPs de saída do Web Service do Render. A opção "Permitir que serviços e recursos do Azure acessem este servidor" vale apenas para recursos dentro do Azure e não libera o Render.
+* `DATABASE_URL` no formato:
+
+```text
+sqlserver://<servidor>.database.windows.net:1433;database=otzar;user=<usuario>;password=<senha>;encrypt=true;trustServerCertificate=false
+```
+
+O Azure SQL Database foi escolhido inicialmente visando **reduzir o custo de desenvolvimento e validação do MVP**, mantendo SQL Server como banco principal.
 
 ---
 
@@ -308,7 +332,7 @@ NestJS (Web Service no Render)
    │
    │ Prisma
    ▼
-PostgreSQL (Neon)
+SQL Server (Azure SQL Database)
 ```
 
 O Site Estático e o Web Service são serviços distintos, com domínios distintos. O backend deve permitir a origem do frontend por meio de configuração de CORS.
@@ -355,10 +379,10 @@ Credenciais, tokens, senhas e chaves privadas **não devem ser versionados no Gi
 | Backend            | **NestJS**       | API e regras de negócio              |
 | Linguagem Backend  | **TypeScript**   | Desenvolvimento do backend           |
 | ORM                | **Prisma**       | Acesso ao banco e migrations         |
-| Banco de dados     | **PostgreSQL**   | Persistência dos dados               |
+| Banco de dados     | **SQL Server 2025** | Persistência dos dados            |
 | Hospedagem Frontend| **Render**       | Site Estático com o `build/web`      |
 | Hospedagem Backend | **Render**       | Web Service com o NestJS             |
-| Hospedagem Banco   | **Neon**         | PostgreSQL gerenciado                |
+| Hospedagem Banco   | **Azure SQL Database** | SQL Server gerenciado          |
 
 ---
 
@@ -372,7 +396,7 @@ flowchart LR
     C["Render<br/>Web Service"]
     D["NestJS"]
     E["Prisma"]
-    F["Neon<br/>PostgreSQL"]
+    F["Azure SQL Database<br/>SQL Server"]
 
     A --> B
     B -->|"HTTPS / REST"| C
@@ -397,7 +421,7 @@ NestJS
 Prisma
 → Acesso e gerenciamento das operações no banco
 
-PostgreSQL
+SQL Server 2025
 → Persistência dos dados
 
 Render — Site Estático
@@ -406,8 +430,8 @@ Render — Site Estático
 Render — Web Service
 → Hospedagem e execução do backend
 
-Neon
-→ Hospedagem e gerenciamento do PostgreSQL
+Azure SQL Database
+→ Hospedagem e gerenciamento do SQL Server
 ```
 
 ---
@@ -423,13 +447,13 @@ Render — Web Service (NestJS)
    ↓
 Prisma — ORM
    ↓
-Neon — PostgreSQL
+Azure SQL Database — SQL Server
 ```
 
-Nos planos gratuitos, o Web Service do Render hiberna após período de inatividade e o compute do Neon é suspenso quando ocioso. A primeira requisição após a ociosidade é mais lenta. O Site Estático não hiberna.
+Nos planos gratuitos, o Web Service do Render hiberna após período de inatividade e o Azure SQL Database *serverless* é pausado quando ocioso. A primeira requisição após a ociosidade é mais lenta. O Site Estático não hiberna.
 
 Quando o tempo de resposta passar a atrapalhar o uso diário, o primeiro investimento deve ser um plano pago do **Web Service**, sem alterar frontend, ORM ou banco.
 
 Conforme o Otzar crescer, os serviços poderão ser migrados ou atualizados individualmente sem necessidade de alterar a arquitetura principal da aplicação.
 
-A separação entre **NestJS, Prisma e PostgreSQL** também permite trocar o provedor de hospedagem do banco ou do backend sem alterar a responsabilidade dessas camadas.
+A separação entre **NestJS, Prisma e SQL Server** também permite trocar o provedor de hospedagem do banco ou do backend sem alterar a responsabilidade dessas camadas.

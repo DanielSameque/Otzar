@@ -66,12 +66,12 @@ npm --version
 
 ---
 
-## PostgreSQL local
+## SQL Server 2025 local
 
-O backend utiliza PostgreSQL. Em desenvolvimento existem duas opções:
+O backend utiliza SQL Server 2025. Em desenvolvimento existem duas opções:
 
 * **Docker** — subir o banco com o `docker-compose.yml` versionado em `backend\`.
-* **Neon** — apontar a `DATABASE_URL` para o banco gerenciado, conforme `08-stack-tecnologica.md`.
+* **Azure SQL Database** — apontar a `DATABASE_URL` para o banco gerenciado, conforme `08-stack-tecnologica.md`.
 
 Com Docker instalado:
 
@@ -80,9 +80,9 @@ cd C:\GitHub\Otzar\backend
 docker compose up -d
 ```
 
-O container expõe o PostgreSQL em `localhost:5432` com usuário, senha e banco `otzar`.
+O container expõe o SQL Server em `localhost:1433` com usuário `sa` e senha `Otzar@Dev2025`. Um serviço auxiliar (`sqlserver-init`) cria o banco `otzar` na primeira subida. Detalhes em [`backend/docs/ambiente-de-desenvolvimento.md`](../../backend/docs/ambiente-de-desenvolvimento.md).
 
-A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"` em vez de impedir a inicialização. Isso permite desenvolver o frontend antes de configurar o PostgreSQL.
+A API sobe mesmo sem banco disponível: `GET /health` responde `database: "down"` em vez de impedir a inicialização. Isso permite desenvolver o frontend antes de configurar o SQL Server.
 
 ---
 
@@ -608,4 +608,4 @@ Definir `DATABASE_URL`, `JWT_SECRET` e `CORS_ORIGIN` nas variáveis do serviço.
 
 O frontend deve chamar apenas a API REST do NestJS via HTTPS.
 
-Nos planos gratuitos, o Web Service hiberna após inatividade e o compute do Neon é suspenso quando ocioso, deixando a primeira requisição mais lenta.
+Nos planos gratuitos, o Web Service hiberna após inatividade e o Azure SQL Database *serverless* é pausado quando ocioso, deixando a primeira requisição mais lenta.

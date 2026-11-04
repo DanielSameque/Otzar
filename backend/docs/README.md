@@ -20,6 +20,6 @@ Requisitos, regras de negócio, modelo de dados e princípios da API ficam em [`
 | [`03-modelo-de-dados.md`](../../frontend/docs/03-modelo-de-dados.md) | Entidades e relacionamentos para o schema Prisma |
 | [`09-api.md`](../../frontend/docs/09-api.md) | Princípios REST, segurança e formato de respostas |
 | [`07-arquitetura.md`](../../frontend/docs/07-arquitetura.md) | Visão geral frontend + backend e fluxo entre camadas |
-| [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md) | Stack, hospedagem (Render/Neon) e versão do Prisma |
+| [`08-stack-tecnologica.md`](../../frontend/docs/08-stack-tecnologica.md) | Stack, hospedagem (Render/Azure SQL Database) e versão do Prisma |
 
 O mapa completo da documentação do monorepo está em [`docs/README.md`](../../docs/README.md).

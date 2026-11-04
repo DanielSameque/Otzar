@@ -21,7 +21,7 @@ backend/
 │   │   └── filters/          # formato único de erro da API
 │   ├── prisma/               # PrismaService global
 │   └── health/               # GET /health
-├── docker-compose.yml        # PostgreSQL local
+├── docker-compose.yml        # SQL Server 2025 local
 ├── .env.example              # variáveis de ambiente de referência
 └── docs/                     # documentação desta aplicação
 ```
@@ -36,7 +36,7 @@ Cada recurso da API segue a separação **Controller → Service → Prisma**, c
 flowchart LR
     C["Controller"] --> S["Service"]
     S --> P["PrismaService"]
-    P --> DB[("PostgreSQL")]
+    P --> DB[("SQL Server 2025")]
 ```
 
 | Camada | Responsabilidade | Não deve |
@@ -84,12 +84,12 @@ Erros inesperados respondem `500` com mensagem genérica (`"Erro interno do serv
 
 # Banco de dados (Prisma 7)
 
-O Otzar utiliza o **Prisma ORM 7** com adaptador `@prisma/adapter-pg`. A decisão de não adotar `prisma@8` está documentada em [`08-stack-tecnologica.md`](../../../frontend/docs/08-stack-tecnologica.md).
+O Otzar utiliza o **Prisma ORM 7** com o provider `sqlserver` e o adaptador `@prisma/adapter-mssql`, sobre **SQL Server 2025**. A decisão de não adotar `prisma@8` está documentada em [`08-stack-tecnologica.md`](../../../frontend/docs/08-stack-tecnologica.md).
 
 ## Configuração
 
 * A URL de conexão fica em `prisma.config.ts`, não no bloco `datasource` do schema.
-* O `PrismaClient` é instanciado em `PrismaService` com o adaptador a partir de `DATABASE_URL`.
+* O `PrismaClient` é instanciado em `PrismaService` com `PrismaMssql`, que recebe a própria `DATABASE_URL` (formato `sqlserver://`).
 * O client gerado fica em `generated/prisma/` e **não é versionado**.
 
 ## Comportamento na inicialização
@@ -157,4 +157,4 @@ Não fazem parte desta etapa e serão implementados junto com os módulos de dom
 * Entidades do domínio no schema do Prisma;
 * Endpoints de Projetos, Tarefas, Tickets e demais recursos do MVP ([`10-mvp.md`](../../../frontend/docs/10-mvp.md));
 * Endpoints de Documentos (Base de Conhecimento) e demais recursos pós-MVP;
-* Deploy no Render com `DATABASE_URL` apontando para o Neon.
+* Deploy no Render com `DATABASE_URL` apontando para o Azure SQL Database.

@@ -33,18 +33,20 @@ Sem autenticação. Sem corpo. Sem parâmetros.
 | Campo | Tipo | Descrição |
 | ----- | ---- | --------- |
 | `status` | `"ok"` | A API está em execução. |
-| `database` | `"up"` \| `"down"` | Estado da conexão com o PostgreSQL no momento da consulta. |
+| `database` | `"up"` \| `"down"` | Estado da conexão com o SQL Server no momento da consulta. |
 | `timestamp` | `string` (ISO 8601) | Momento da verificação. |
 
 ## `database: "down"`
 
-Ocorre quando o PostgreSQL está indisponível ou a conexão falhou. A API continua respondendo — apenas o campo `database` indica a falha.
+Ocorre quando o SQL Server está indisponível ou a conexão falhou. A API continua respondendo — apenas o campo `database` indica a falha.
 
 Causas comuns em desenvolvimento:
 
 * Container Docker não iniciado (`docker compose up -d`).
 * `DATABASE_URL` incorreta.
-* PostgreSQL local não instalado ou parado.
+* Banco `otzar` ainda não criado (o serviço `sqlserver-init` não terminou ou falhou — ver `docker compose logs sqlserver-init`).
+* `trustServerCertificate=true` ausente na `DATABASE_URL` local, fazendo a validação do certificado autoassinado do container falhar.
+* Em produção, IP do Render não liberado no firewall do Azure SQL Database.
 
 ---
 
@@ -56,7 +58,7 @@ sequenceDiagram
     participant HC as HealthController
     participant HS as HealthService
     participant P as PrismaService
-    participant DB as PostgreSQL
+    participant DB as SQL Server
 
     C->>HC: GET /health
     HC->>HS: check()
